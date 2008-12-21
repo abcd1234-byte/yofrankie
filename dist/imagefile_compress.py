@@ -158,10 +158,17 @@ def main():
 					tot_blend_size+= orig_size
 					f_jpg = replace_ext(f, 'jpg')
 					os.system('convert "%s" "%s"' % (f, f_jpg))
-					os.system('rm "%s"' % f) # remove the uncompressed image
 					new_size= os.path.getsize(f_jpg)
-					tot_blend_size_saved += orig_size-new_size
-					print 'saved %.2f%%' % (100-(100*(float(new_size)/orig_size)))
+					
+					if new_size < orig_size:
+						os.system('rm "%s"' % f) # remove the uncompressed image
+						tot_blend_size_saved += orig_size-new_size
+						print 'saved %.2f%%' % (100-(100*(float(new_size)/orig_size)))
+						
+					else:
+						os.system('rm "%s"' % f_jpg) # jpeg image isnt smaller, remove it
+						print 'no space saved, not using compressed file'
+					
 				else:
 					print 'has alpha, cannot compress.'
 					tot_alredy_compressed+=1
