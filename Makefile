@@ -16,7 +16,8 @@ all:
 	
 	
 	# Convert images, correct blendfile paths
-	$(PYTHON) dist/imagefile_compress.py $(BLENDER) $(PACKAGE_DIR)
+	# TODO - this is broken with 2.48a, because blend files saved have no G.curscreen
+	# $(PYTHON) dist/imagefile_compress.py $(BLENDER) $(PACKAGE_DIR)
 	
 	# Compress all blendfiles
 	$(PYTHON) dist/blendfile_gzip.py $(PACKAGE_DIR)
