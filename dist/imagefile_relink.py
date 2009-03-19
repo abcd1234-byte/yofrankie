@@ -25,3 +25,6 @@ if change:
 	filename = Blender.Get('filename')
 	print "Saving", filename
 	Blender.Save(filename, True) # True==Overwrite
+
+# Incase were not running in background mode
+Blender.Quit()

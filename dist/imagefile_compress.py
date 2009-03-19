@@ -26,6 +26,13 @@
 # run this command with...
 # imagefile_compress ~/somepath/blender.bin /someplace/project_tree
 
+# Bug in blender in 2.48 where G.curscreen is left empty causing the blenderplayer to crash
+# until its fixed this needs to run in forground mode
+BACKGROUND = False
+
+# not nice but fixes index color image being converted
+EXCEPTIONS = ['font_peach.tga']
+
 # root_dir= '/somedir'
 import sys
 root_dir = sys.argv[-1]
@@ -143,35 +150,38 @@ def main():
 	tot_blend_size= 0
 	tot_blend_size_saved= 0
 	for f in files:
-		if len(f) >= 6: # .blend is 6 chars
-			f_lower= f.lower()
-			if f_lower.endswith('.png') or\
-			f_lower.endswith('.tga'):
+		
+		if f.split('/')[-1].split('\\')[-1] in EXCEPTIONS:
+			continue
+		
+		f_lower= f.lower()
+		if f_lower.endswith('.png') or\
+		f_lower.endswith('.tga'):
+			
+			print f,'...',
+			tot_images+=1
+			# allows for dirs with .blend, will just be false.
+			if isimage_noalpha(f):
+				print 'compressing ...',
+				tot_compressed+= 1
+				orig_size= os.path.getsize(f)
+				tot_blend_size+= orig_size
+				f_jpg = replace_ext(f, 'jpg')
+				os.system('convert "%s" "%s"' % (f, f_jpg))
+				new_size= os.path.getsize(f_jpg)
 				
-				print f,'...',
-				tot_images+=1
-				# allows for dirs with .blend, will just be false.
-				if isimage_noalpha(f):
-					print 'compressing ...',
-					tot_compressed+= 1
-					orig_size= os.path.getsize(f)
-					tot_blend_size+= orig_size
-					f_jpg = replace_ext(f, 'jpg')
-					os.system('convert "%s" "%s"' % (f, f_jpg))
-					new_size= os.path.getsize(f_jpg)
-					
-					if new_size < orig_size:
-						os.system('rm "%s"' % f) # remove the uncompressed image
-						tot_blend_size_saved += orig_size-new_size
-						print 'saved %.2f%%' % (100-(100*(float(new_size)/orig_size)))
-						
-					else:
-						os.system('rm "%s"' % f_jpg) # jpeg image isnt smaller, remove it
-						print 'no space saved, not using compressed file'
+				if new_size < orig_size:
+					os.system('rm "%s"' % f) # remove the uncompressed image
+					tot_blend_size_saved += orig_size-new_size
+					print 'saved %.2f%%' % (100-(100*(float(new_size)/orig_size)))
 					
 				else:
-					print 'has alpha, cannot compress.'
-					tot_alredy_compressed+=1
+					os.system('rm "%s"' % f_jpg) # jpeg image isnt smaller, remove it
+					print 'no space saved, not using compressed file'
+				
+			else:
+				print 'has alpha, cannot compress.'
+				tot_alredy_compressed+=1
 	
 	print '\nTotal files:', tot_files
 	print 'Total Images:', tot_images
@@ -185,7 +195,12 @@ def main():
 	for f in files:
 		f_lower = f.lower()
 		if f_lower.endswith('.blend'):
-			os.system('%s -b "%s" -P dist/imagefile_relink.py' % (blend_bin, f))
+			if BACKGROUND:
+				bg = '-b'
+			else:
+				bg = ''
+			
+			os.system('%s %s "%s" -P dist/imagefile_relink.py' % (blend_bin, bg, f))
 			
 			
 	
