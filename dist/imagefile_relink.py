@@ -22,6 +22,9 @@ for i in bpy.data.images:
 		
 
 if change:
+	# Workaround for G.curscreen being null
+	Blender.Window.SetScreen(Blender.Window.GetScreens()[0])
+	
 	filename = Blender.Get('filename')
 	print "Saving", filename
 	Blender.Save(filename, True) # True==Overwrite

@@ -28,7 +28,7 @@
 
 # Bug in blender in 2.48 where G.curscreen is left empty causing the blenderplayer to crash
 # until its fixed this needs to run in forground mode
-BACKGROUND = False
+BACKGROUND = True
 
 # not nice but fixes index color image being converted
 EXCEPTIONS = ['font_peach.tga']
