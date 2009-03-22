@@ -10,7 +10,7 @@ all:
 	# copy with svn export or normal copy if this is not a checkout
 	if test -d .svn; \
 	then $(SVN) export . $(PACKAGE_DIR); \
-	else mkdir ./package; cp -R audio chars effects hud levels menus props textures $(PACKAGE_DIR)/; \
+	else mkdir ./package; cp -pR audio chars effects hud levels menus props textures $(PACKAGE_DIR)/; \
 	fi
 	# end shell command
 	
