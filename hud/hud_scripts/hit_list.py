@@ -1,18 +1,18 @@
 import GameLogic
 
 def main(cont):
-	own=cont.getOwner()
-	sens_msg = cont.getSensor('hit_list_msg')
+	own=cont.owner
+	sens_msg = cont.sensors['hit_list_msg']
 	
 	# Get all messages and update the ID's we need to.
-	messages_player_ids = sens_msg.getBodies()
+	messages_player_ids = sens_msg.bodies
 	
 	# checking for a zero length list is not helpful
 	# if we get one, just update both chars
 	
 	hud_dict = GameLogic.globalDict['HUD']
 	
-	actus = [(s.getName(), s) for s in cont.getActuators()]
+	actus = [(s.name, s) for s in cont.actuators]
 	actus.sort()
 	
 	
@@ -45,7 +45,7 @@ def main(cont):
 			# add to the players bonecount, cheat here a bit, dont actually use the actuator, just get its owner
 			bonecount = hud_dict['bonecount_p' + player_num] + 1
 			hud_dict['bonecount_p' + player_num] = bonecount 
-			cont.getActuator('set_bonecount_p' + player_num).getOwner().Text = '%.4d' % bonecount 
+			cont.actuators['set_bonecount_p' + player_num].owner.Text = '%.4d' % bonecount 
 			# Done with bonetext
 	
 		## print '\thud: hitlist - ', hitlist
@@ -62,10 +62,10 @@ def main(cont):
 		# remove all hitlist items that are invisible now
 		
 		for actu in actus_icons:
-			actu_own = actu.getOwner()
+			actu_own = actu.owner
 			icon_id = actu_own.id
-			if actu_own.getVisible() == False and icon_id != -1:
-				actu_text = actu_own.getChildren()[0]
+			if actu_own.visible == False and icon_id != -1:
+				actu_text = actu_own.children[0]
 				
 				# Invalid again
 				actu_own.id = -1
@@ -88,7 +88,7 @@ def main(cont):
 			hitlist.pop()
 		
 		
-		actus_id = [ actu.getOwner().id for actu in actus_icons ]
+		actus_id = [ actu.owner.id for actu in actus_icons ]
 		
 		i = 0
 		
@@ -104,13 +104,13 @@ def main(cont):
 			icon_text = '%d/%d' % (life, lifemax)
 			
 			# Get the text object and assign it somthing.
-			actu_own = actu.getOwner()
-			actu_text = actu_own.getChildren()[0]
+			actu_own = actu.owner
+			actu_text = actu_own.children[0]
 			
 			## print '\thud: setting icon!', i, id, icon_mesh_name, life, lifemax
 			
-			current_mesh = actu.getMesh()
-			if current_mesh: current_mesh = current_mesh[2:]
+			current_mesh = actu.mesh
+			if current_mesh: current_mesh = current_mesh.name[2:]
 			
 			# print "\thud debug", icon_mesh_name, current_mesh, icon_text, actu_text.Text, UPDATE_FULL
 			
@@ -123,7 +123,7 @@ def main(cont):
 					actu_text.Text = icon_text
 				
 				if icon_mesh_name != current_mesh:
-					actu.setMesh(icon_mesh_name)
+					actu.mesh = icon_mesh_name
 					actu.instantReplaceMesh()
 				
 				
@@ -131,10 +131,11 @@ def main(cont):
 				actu_own.id = id
 				
 				# A bit sneaky but its quicker to set the state from here. it will turn its self off after.
-				actu_own.setState(1<<15) # state 16
+				actu_own.state = 1<<15 # state 16
 				
-				# GameLogic.addActiveActuator( cont.getActuator('inactive_state_p%s_%d' % (player_num, i)), True )
-				#GameLogic.addActiveActuator( cont.getActuator('active_state_p%s_%d' % (player_num, i)), True )
+				# cont.activate('inactive_state_p%s_%d' % (player_num, i))
+				# cont.activate('active_state_p%s_%d' % (player_num, i))
+				
 				
 			i+=1
 		
@@ -145,10 +146,10 @@ def main(cont):
 			actu = actus_icons[i]
 				
 			# Get the text object and assign it somthing.
-			actu_own = actu.getOwner()
-			actu_text = actu_own.getChildren()[0]
+			actu_own = actu.owner
+			actu_text = actu_own.children[0]
 			
 			actu_own.setVisible(False, True) # recursive, also sets text invisible
-			GameLogic.addActiveActuator( cont.getActuator('inactive_state_p%s_%d' % (player_num, i)), True )
+			cont.activate('inactive_state_p%s_%d' % (player_num, i))
 		
 ## print "\n\nUPDATING HUD"

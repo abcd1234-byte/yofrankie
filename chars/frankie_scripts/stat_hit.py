@@ -8,17 +8,17 @@ import GameLogic
 def main(cont):
 	PROJECTILE_SPEED = 5.0
 	
-	own = cont.getOwner()
+	own = cont.owner
 	
 	HIT_PLAYED = False
-	try:	actu_hit = cont.getActuator('sfx_hit')
+	try:	actu_hit = cont.actuators['sfx_hit']
 	except:	HIT_PLAYED = True
 		
 		
 	
-	#sens = cont.getSensor('projectile_touch')
-	for sens in cont.getSensors():		
-		hit_ob = sens.getHitObject()
+	#sens = cont.sensors['projectile_touch']
+	for sens in cont.sensors:
+		hit_ob = sens.hitObject
 		if not hit_ob:
 			continue
 		
@@ -38,4 +38,4 @@ def main(cont):
 	 		
 			# Play the hit sound if we havnt played it and if its not liquid
 			if HIT_PLAYED == False and not hasattr(hit_ob, 'liquid'):
-				GameLogic.addActiveActuator( actu_hit, True)
+				cont.activate(actu_hit)

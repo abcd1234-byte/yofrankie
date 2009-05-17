@@ -1,14 +1,14 @@
 import GameLogic
 
 def main(cont):
-	own = cont.getOwner()
+	own = cont.owner
 	
 	if own.type == 'shp':
 		return
 	
-	sens_attack = cont.getSensor('predator_collide')
+	sens_attack = cont.sensors['predator_collide']
 	
-	predator_ob = sens_attack.getHitObject()
+	predator_ob = sens_attack.hitObject
 	
 	if not predator_ob:
 		return
@@ -23,11 +23,11 @@ def main(cont):
 	
 	# face the predator, this is always activated
 	# so we only need to spesify what to track to.
-	actu_track = cont.getActuator('track_predator')
-	actu_track.setObject(predator_ob)
+	actu_track = cont.actuators['track_predator']
+	actu_track.object = predator_ob
 	
 	# Dont track, until we enter the state, only set the track ob
 	# since the state does the tracking
 	
 	# Change to attacking state
-	GameLogic.addActiveActuator( cont.getActuator('predator_attack_state'), 1 )
+	cont.activate('predator_attack_state')

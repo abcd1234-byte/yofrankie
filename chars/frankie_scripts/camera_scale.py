@@ -7,13 +7,13 @@ def main(cont):
 	MIN = 0.6
 	THRESH = 0.6 # Ignore anything under this distance, frankie is probably carrying somthing.
 	
-	own = cont.getOwner()
+	own = cont.owner
 	
 	# For sone annoying reason this happens when the scene is initialized
-	sens_wall = cont.getSensor('camera_ray')
+	sens_wall = cont.sensors['camera_ray']
 	
-	ob = sens_wall.getHitObject()
-	#if ob:	print '\tcamera: rayhit object -', ob.getName()
+	ob = sens_wall.hitObject
+	#if ob:	print '\tcamera: rayhit object -', ob.name
 	
 	sorig = own.scaling[0] # assume uniform scale
 	
@@ -23,10 +23,10 @@ def main(cont):
 		
 		carry_obstructor = False
 		# incase we are carrying an object, see if its logic 
-		parent = ob.getParent()
+		parent = ob.parent
 		while parent:
 			ob = parent
-			parent = ob.getParent()
+			parent = ob.parent
 			
 			if hasattr(ob, 'carried') and ob.carried != 0:
 				carry_obstructor = True
@@ -35,7 +35,7 @@ def main(cont):
 		if carry_obstructor:
 			scale = MAX # this is not quite correct, we should really shoot another ray incase there is an obstructor
 		else:
-			scale = own.getDistanceTo(sens_wall.getHitPosition())
+			scale = own.getDistanceTo(sens_wall.hitPosition)
 			
 			if scale < THRESH: scale = sorig
 			elif scale > MAX: scale = MAX

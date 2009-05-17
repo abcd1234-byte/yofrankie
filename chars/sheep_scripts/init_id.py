@@ -7,9 +7,9 @@ def main(cont):
 	except:
 		ID = GameLogic.ID = 0
 	
-	own = cont.getOwner()
+	own = cont.owner
 	# For respawning.
-	own.x_orig, own.y_orig, own.z_orig = own.getPosition()
+	own.x_orig, own.y_orig, own.z_orig = own.worldPosition
 	own.id = ID
 	# print "setting ID", ID
 
@@ -19,7 +19,7 @@ def main(cont):
 
 	# Assign dummy value
 	own.own_rig = 0
-	for ob in own.getChildren():
+	for ob in own.children:
 		name = ob.name[2:]
 		
 		if 'rig_ram' in name:
@@ -38,8 +38,8 @@ def main(cont):
 		# set the object by name and it should help
 		# This should not be needed
 		'''
-		actu = cont.getActuator('create_poof')
-		actu.setObject('flash_death')
+		actu = cont.actuators['create_poof']
+		actu.object = 'flash_death'
 		'''
-		
-	GameLogic.addActiveActuator(cont.getActuator('default_state'), 1)
+	
+	cont.activate('default_state')

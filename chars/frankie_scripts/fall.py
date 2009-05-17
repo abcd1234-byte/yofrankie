@@ -22,11 +22,11 @@ DBL_JUMP_BEGIN_TIME = 0.3 # How long after jumping your allowed to double jump
 def do_pradict_land(own, cont, velocity):
 	# Check if we should land?
 	if velocity[2] < -2.0: # Check downward falling velocity, 0.0 could be used but -2.0 seems good enough
-		ray_to = own.getPosition()
+		ray_to = own.worldPosition
 		ray_to[2] -= 10.0
 		if own.rayCastTo(ray_to, 0.6, 'ground'):
-			GameLogic.addActiveActuator(cont.getActuator('landing'), True)
-			GameLogic.addActiveActuator(cont.getActuator('landing_snd'), True)
+			cont.activate('landing')
+			cont.activate('landing_snd')
 
 
 def do_clamp_speed(own, cont, velocity):		
@@ -62,10 +62,10 @@ def do_double_jump(own, cont, dropping_dir, actu_dbl_jump_anim, actu_dbl_jump_fo
 			# print "Reset Actuator 2", actu_dbl_jump_anim.getStart()
 			# actu_dbl_jump_anim.setFrame( actu_dbl_jump_anim.getStart() )
 			
-			GameLogic.addActiveActuator(actu_dbl_jump_anim, True)
+			cont.activate(actu_dbl_jump_anim)
 			actu_dbl_jump_anim = None
 			
-			GameLogic.addActiveActuator(actu_dbl_jump_force, True)
+			cont.activate(actu_dbl_jump_force)
 			actu_dbl_jump_force = None # Dont disable this
 			
 			own.double_jump = DBL_JUMP_DONE
@@ -81,35 +81,35 @@ def do_double_jump(own, cont, dropping_dir, actu_dbl_jump_anim, actu_dbl_jump_fo
 
 def do_glide_state(own, cont, velocity):
 	# We know this cant be done before double jumping or missing a double jump
-	# print cont.getSensor('any_collide').isPositive(), cont.getSensor('any_collide').getHitObjectList(), 
-	###print [o.name for o in cont.getSensor('any_collide').getHitObjectList()]
+	# print cont.sensors['any_collide'].positive, cont.sensors['any_collide'].hitObjectList,
+	###print [o.name for o in cont.sensors['any_collide'].hitObjectList]
 	
 	if velocity[2] > 0.0: # we must be falling
 		return
 	
-	if cont.getSensor('collide_any').isPositive():
+	if cont.sensors['collide_any'].positive:
 		return
 	
-	# print dir(cont.getSensor('any_collide'))
+	# print dir(cont.sensors['any_collide'])
 	if	own.double_jump == DBL_JUMP_MISSED  or  \
 		(own.double_jump == DBL_JUMP_DONE  and  own.jump_time > 100.3): # and \
 		# Note, own.jump_time over 100.0 will give a limit so you cant double jump right away
 		
 		
 		# Other logic that didnt work so well
-		# (not cont.getSensor('any_collide').isPositive()):
+		# (not cont.sensors['any_collide'].positive):
 		# (own.double_jump == DBL_JUMP_DONE and (actu_dbl_jump_anim.getFrame() > actu_dbl_jump_anim.getEnd()-1.0)):
 		
-		GameLogic.addActiveActuator(cont.getActuator('glide_state'), True)
+		cont.activate('glide_state')
 
 def main(cont):
 	
-	own = cont.getOwner()
+	own = cont.owner
 	
 	# own.restoreDynamics() # WE SHOULDNT HAVE TO CALL THIS HERE
 	
 	
-	# print [o.name for o in cont.getSensor('any_collide').getHitObjectList()]
+	# print [o.name for o in cont.sensors['any_collide'].hitObjectList]
 	
 	velocity = own.getLinearVelocity()
 	
@@ -121,16 +121,16 @@ def main(cont):
 	do_clamp_speed(own, cont, velocity)
 	do_pradict_land(own, cont, velocity)
 	
-	KEY_JUMP = cont.getSensor('key_jump').isPositive()
+	KEY_JUMP = cont.sensors['key_jump'].positive
 	
 	
 	
-	actu_dbl_jump_anim = cont.getActuator('doublejump')
-	actu_dbl_jump_force = cont.getActuator('double_jump_force')	
+	actu_dbl_jump_anim = cont.actuators['doublejump']
+	actu_dbl_jump_force = cont.actuators['double_jump_force']
 	double_jump_done = False
 	
 	# Did we just enter this state?
-	if cont.getSensor('generic_true_pulse').isPositive():
+	if cont.sensors['generic_true_pulse'].positive:
 		if own.jump_time < 0.3:
 			if not KEY_JUMP: # This is very unlikely since we only JUST sstarted jumping. in cases where we fall off a ledge its possible still.
 				own.double_jump = DBL_JUMP_OK # Key is released, we can double jump next time its pressed.
@@ -154,14 +154,14 @@ def main(cont):
 	# If actions are not None, assume we didint want to suse them
 	
 	if not double_jump_done:
-		GameLogic.addActiveActuator(actu_dbl_jump_force, False)	
+		cont.deactivate(actu_dbl_jump_force)
 	
 	# Add falling animations
 	# print '%.4f' % velocity[2]
 	# Use the right falling animation, falling up or down?
 	if velocity[2] > 0.0:
-		GameLogic.addActiveActuator(cont.getActuator('fall_down'), False)
-		GameLogic.addActiveActuator(cont.getActuator('fall_up'), True)
+		cont.deactivate('fall_down')
+		cont.activate('fall_up')
 	else:
-		GameLogic.addActiveActuator(cont.getActuator('fall_up'), False)
-		GameLogic.addActiveActuator(cont.getActuator('fall_down'), True)
+		cont.deactivate('fall_up')
+		cont.activate('fall_down')

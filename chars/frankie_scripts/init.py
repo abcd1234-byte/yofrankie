@@ -83,9 +83,9 @@ def main(cont):
 	except:	PROPS = globalDict['PROP_BACKUP'][ID] = {}
 
 	# Setup screens for multi player
-	own_camera= cont.getOwner() # The Camera
+	own_camera= cont.owner # The Camera
 
-	own_player = cont.getSensor('init_generic').getOwner()
+	own_player = cont.sensors['init_generic'].owner
 	# For respawning.
 
 	own_player.id = ID
@@ -101,11 +101,11 @@ def main(cont):
 		playcount = conf['PLAYER_COUNT']
 		
 		if playcount != 1 and playcount != 2:
-			GameLogic.addActiveActuator(cont.getActuator('set_camera'), True)
+			cont.activate('set_camera')
 			return True
 		if ID != 0 and ID != 1:
 			print "Unsupported number of players, running anyway"
-			GameLogic.addActiveActuator(cont.getActuator('set_camera'), True)
+			cont.activate('set_camera')
 			return True
 		
 		# Single player game. no tricks
@@ -118,7 +118,7 @@ def main(cont):
 		elif playcount == 2:
 
 			# Split screen
-			own_camera.enableViewport(1)
+			own_camera.useViewport = True
 			
 			w = Rasterizer.getWindowWidth()
 			h = Rasterizer.getWindowHeight()
@@ -134,7 +134,7 @@ def main(cont):
 				own_camera.setViewport(w/2, 0, w, h) 
 		
 		if not WITHOUT_CAMERA:
-			GameLogic.addActiveActuator(cont.getActuator('set_camera'), True)
+			cont.activate('set_camera')
 		
 		return True
 
@@ -153,7 +153,7 @@ def main(cont):
 		
 		# Only add the hud once.
 		if ID == 0:# and conf['PLAYER_COUNT'] == 1:
-			GameLogic.addActiveActuator(cont.getActuator('set_hud'), True)
+			cont.activate('set_hud')
 		
 		
 
@@ -161,20 +161,20 @@ def main(cont):
 		import GameKeys
 		
 		# First see if we have a valid joystick
-		sensors = cont.getSensors()
-		print len(sensors), 'sensors'
-		joySensors = [s for s in sensors if hasattr(s, 'isConnected')]
-		keySensors = [s for s in sensors if hasattr(s, 'getKey')]
+		sensors = cont.sensors
+		# print len(sensors), 'sensors'
+		joySensors = [s for s in sensors if hasattr(s, 'connected')]
+		keySensors = [s for s in sensors if hasattr(s, 'key')]
 		
-		own_joy = joySensors[0].getOwner()
-		own_kb = keySensors[0].getOwner()
+		own_joy = joySensors[0].owner
+		own_kb = keySensors[0].owner
 		
 		# If we have a valid joystick, then remove keyboard, else remove joystick object.
 		for sens in joySensors:
-			sens.setIndex(ID) # player index can match joystick index
+			sens.index = ID # player index can match joystick index
 		
 		# Use the last joystick sensor
-		if sens.isConnected():
+		if sens.connected:
 			# remove the keyboard object and dont bother setting up keyconfig
 			print 'Player', ID, 'using joystick'
 			own_kb.endObject()
@@ -221,18 +221,18 @@ def main(cont):
 			}
 		
 		if KEY_MAPPING:	
-			for sens in cont.getSensors():
-				try:	key = sens.getKey()
+			for sens in cont.sensors:
+				try:	key = sens.key
 				except:	key = None
 				
 				if key != None:
-					sens.setKey(KEY_MAPPING[key])
+					sens.key = KEY_MAPPING[key]
 		else:
 			print 'Cannot map keys for player ID', ID
 				
 	def backupPosition():
 		# For respawning. run BEFORE backupProps
-		own_player.orig_pos = '%.3f %.3f %.3f' % tuple(own_player.getPosition())
+		own_player.orig_pos = '%.3f %.3f %.3f' % tuple(own_player.worldPosition)
 
 	def backupProps():
 		# These are restored when respawning
@@ -252,31 +252,29 @@ def main(cont):
 		try:	scene_name = globalDict['PORTAL_SCENENAME']
 		except:	scene_name = ''
 		
-		if scene_name and scene_name != sce.getName():
+		if scene_name and scene_name != sce.name:
 			# we have come from another blend file that needs to switch to a scene.
 			# first switch the scene, this script will run again and 
 			
-			set_scene_actu = cont.getActuator('portal_scene')
-			set_scene_actu.setScene(scene_name)
-			
-			GameLogic.addActiveActuator(set_scene_actu, True)
-			
+			set_scene_actu = cont.actuators['portal_scene']
+			set_scene_actu.scene = scene_name
+			cont.activate(set_scene_actu)
 			return
 		
 		try:	target_name = globalDict['PORTAL_OBNAME']
 		except: return
 		
 		try:
-			target_ob = sce.getObjectList()[target_name] # alredy has 'OB' prefix
+			target_ob = sce.objects[target_name] # alredy has 'OB' prefix
 		except:
 			print 'Oops: portal switch error,', target_name, 'object is not in the scene'
 			return
 		
-		pos = target_ob.getPosition()
+		pos = target_ob.worldPosition
 		pos[2] += 1.0 * ID # move other players higher so they dont overlap
 		
-		own_player.setPosition( pos )
-		own_player.setOrientation( target_ob.getOrientation() )
+		own_player.localPosition = pos
+		own_player.localOrientation = target_ob.worldOrientation
 		
 		# Keep GameLogic.PORTAL_OBNAME incase there are more players
 

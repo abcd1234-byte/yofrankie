@@ -6,12 +6,12 @@ from  Mathutils import Matrix
 
 # We use this a lot, just to be neat
 def dontCatch(cont):
-	GameLogic.addActiveActuator( cont.getActuator('catch'), False )	
+	cont.deactivate('catch')
 
 
 def do_catch(cont, own, ob_carry, ob_catch_bonechild):
 	
-	own_pos = own.getPosition()
+	own_pos = own.worldPosition
 		
 	'''
 	If we are ok to catch an object, this function runs on all catchable objects
@@ -26,7 +26,7 @@ def do_catch(cont, own, ob_carry, ob_catch_bonechild):
 		print '\tcant catch: alredy being carried by another'
 		return False
 	
-	ob_carry_pos = ob_carry.getPosition()
+	ob_carry_pos = ob_carry.worldPosition
 	
 	if ob_carry_pos[2] < own_pos[2]+0.1:
 		print '\tcant catch: catch objects Z position too low'
@@ -59,17 +59,17 @@ def do_catch(cont, own, ob_carry, ob_catch_bonechild):
 	# Orient the carry objects Z axis to the -Z of the sheep,
 	# since it should be upside down
 	if hasattr(ob_carry, 'type') and ob_carry.type == 'shp':
-		ob_catch_bonechild.alignAxisToVect(ob_carry.getAxisVect([0,0,-1]), 2)
-		pos = ob_catch_bonechild.getPosition()
+		ob_catch_bonechild.alignAxisToVect(ob_carry.getAxisVect((0.0, 0.0,-1.0)), 2)
+		pos = ob_catch_bonechild.worldPosition
 	else:
 		# ob_catch_bonechild.alignAxisToVect(ob_carry.getAxisVect([0,1,0]), 2)
-		#pos = ob_catch_bonechild.getPosition()
+		#pos = ob_catch_bonechild.worldPosition
 		#pos[2] += 1
 		
-		ob_catch_bonechild.alignAxisToVect(ob_carry.getAxisVect([0,0,-1]), 2)
+		ob_catch_bonechild.alignAxisToVect(ob_carry.getAxisVect((0.0, 0.0, -1.0)), 2)
 		#ob_catch_bonechild.alignAxisToVect(ob_carry.getAxisVect([0,1,0]), 1)
-		ob_carry.alignAxisToVect(own.getAxisVect([0,-1,0]), 1)
-		pos = ob_catch_bonechild.getPosition()
+		ob_carry.alignAxisToVect(own.getAxisVect((0.0, -1.0, 0.0)), 1)
+		pos = ob_catch_bonechild.worldPosition
 		
 		# Only for carrying frankie
 		if hasattr(ob_carry, 'predator'):
@@ -79,18 +79,18 @@ def do_catch(cont, own, ob_carry, ob_catch_bonechild):
 	# Set the parent
 	# ob_catch_bonechild.alignAxisToVect([0,0,1], 2)
 	
-	ob_carry.setPosition( pos )
+	ob_carry.localPosition = pos
 	# Dont touch transformation after this!
 	ob_carry.setParent(ob_catch_bonechild)
 	own.force_walk = -1.0
 	own.carrying = 1
 	ob_carry.carried = 1
-	GameLogic.addActiveActuator( cont.getActuator('catch'), True)	
-	GameLogic.addActiveActuator( cont.getActuator('carry_constrain_up'), True)	
+	cont.activate('catch')
+	cont.activate('carry_constrain_up')
 
 
 def main(cont):
-	own = cont.getOwner()
+	own = cont.owner
 	
 	# This object is a child of the wrist bone, it is used as the parent so the animations control the object motion
 	
@@ -99,8 +99,8 @@ def main(cont):
 	if own.carrying:
 		return # Alredy carrying
 	
-	ob_catch_bonechild = cont.getSensor('carry_pos_linkonly').getOwner()	
-	if ob_catch_bonechild.getChildren():
+	ob_catch_bonechild = cont.sensors['carry_pos_linkonly'].owner	
+	if ob_catch_bonechild.children:
 		print '\tcarry warning, carrying was not set but had an object in hand! - should never happen, correcting'
 		own.carrying = 1
 		return
@@ -130,9 +130,9 @@ def main(cont):
 		dontCatch(cont)
 		return	
 	
-	sens_collideCarry = cont.getSensor('carry_collider')
+	sens_collideCarry = cont.sensors['carry_collider']
 	
-	if not sens_collideCarry.isPositive():
+	if not sens_collideCarry.positive:
 		print '\tcant catch anything: carry collider false'
 		dontCatch(cont)
 		return
@@ -142,7 +142,7 @@ def main(cont):
 	# look through all catch collisions and catch the first one we can.
 	# its unlikely there will ever be more then 2 or 3 but this is safest.
 	
-	for ob_carry in sens_collideCarry.getHitObjectList():
+	for ob_carry in sens_collideCarry.hitObjectList:
 		if do_catch(cont, own, ob_carry, ob_catch_bonechild):
 			return
 	

@@ -1,6 +1,6 @@
 
 def main(cont):
-	own = cont.getOwner()
+	own = cont.owner
 	
 	# Incase frankie would run into them
-	own.setPosition([0,0,10000])	
+	own.localPosition = (0.0, 0.0, 10000.0)

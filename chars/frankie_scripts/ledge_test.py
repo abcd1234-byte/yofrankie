@@ -30,16 +30,16 @@ def frankTestLedge(own, cont, hit_object, CORRECTION_RAY):
 		print "cant grab - carry!"
 		return None, None, None
 
-	own_pos = own.getPosition()	
+	own_pos = own.worldPosition
 	'''
-	own_pos = own.getPosition()
+	own_pos = own.worldPosition
 	own_pos_ofs = own_pos[:]
 	[2] += RAY_CAST_Z_OFFSET
 	'''	
 
 	
 	# Ok we are colliding and pressing up		
-	y_axis = own.getAxisVect([0,1,0])
+	y_axis = own.getAxisVect( (0.0, 1.0, 0.0) )
 	
 	ray_dir = own_pos[:]
 	ray_dir[0] += y_axis[0]

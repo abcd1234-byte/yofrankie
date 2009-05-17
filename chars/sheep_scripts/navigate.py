@@ -11,12 +11,12 @@ def setpos(pos):
 		ob_debug = g.DEBUG_OB
 	except:
 		s = g.getCurrentScene()
-		for ob in s.getObjectList():
+		for ob in s.objects:
 			if ob.name =='OBdebug':
 				ob_debug = ob
 				break
 	
-	ob.setPosition(pos)
+	ob.localPosition = pos
 	return
 '''
 
@@ -27,7 +27,7 @@ def SIDE_OF_LINE(pa,pb,pp):
 	return s
 
 def sideOfGameObject(own, own_pos, pt):
-	pos_y = own.getAxisVect([0,1,0])
+	pos_y = own.getAxisVect((0.0, 1.0, 0.0))
 	pos_y[0] += own_pos[0]
 	pos_y[1] += own_pos[1]
 	
@@ -43,7 +43,7 @@ def reset_target(own, cont, own_pos, predator_ob):
 	
 	L = TARGET_DIST_MIN + (Rand() * (TARGET_DIST_MAX-TARGET_DIST_MIN))
 
-	own_front= own.getAxisVect([0,L,0])
+	own_front= own.getAxisVect((0.0, L, 0.0))
 	
 	# Should we run toward or away?
 
@@ -60,10 +60,10 @@ def reset_target(own, cont, own_pos, predator_ob):
 			ATTACK = False
 		elif own.type == 'rat':
 			# attack only when frankie is facing away - Sneaky!
-			pred_front = Vector(predator_ob.getAxisVect([0,1,0]))
+			pred_front = Vector(predator_ob.getAxisVect((0.0, 1.0, 0.0)))
 			pred_front.z = 0.0
 			
-			pos = Vector(predator_ob.getPosition())
+			pos = Vector(predator_ob.worldPosition)
 			new_dir = own_pos - pos
 			
 			if DotVecs(new_dir, pred_front) > 0.0:
@@ -76,7 +76,7 @@ def reset_target(own, cont, own_pos, predator_ob):
 		
 		
 		#if predator_ob and Rand() > 0.33:
-		pos = Vector(predator_ob.getPosition())
+		pos = Vector(predator_ob.worldPosition)
 		new_dir = own_pos - pos
 		
 		if ATTACK:
@@ -119,8 +119,8 @@ def angle_target(own, cont, own_pos):
 	# Head towards our target 
 	direction = target_direction(own, cont, own_pos)
 	
-	# own_mat = Matrix(*own.getOrientation()).transpose()
-	own_y = Vector(own.getAxisVect([0,1,0]))
+	# own_mat = Matrix(*own.localOrientation).transpose()
+	own_y = Vector(own.getAxisVect((0.0, 1.0, 0.0)))
 	own_y.z = 0.0
 	ang = AngleBetweenVecs(own_y, direction)
 	if CrossVecs(direction, own_y).z < 0.0:
@@ -179,15 +179,15 @@ def main(cont):
 	TOO_CLOSE = 0.55
 	DIRECTION[0] = 0 # just incase, multiple animals will use this module so must initialize
 	
-	own = cont.getOwner()
+	own = cont.owner
 	# print own.type
-	actu_motion = cont.getActuator('motion_py')
+	actu_motion = cont.actuators['motion_py']
 	
 	# print own.target_time
 	
 	### setpos([own.target_x, own.target_y, 0.0])
 	
-	cont_name = cont.getName()
+	cont_name = cont.name
 	
 	#print cont_name, 'cont_name'
 	if cont_name.startswith('walk_normal'):
@@ -205,22 +205,22 @@ def main(cont):
 		
 		TIME_LIMIT = 4.0
 		ESCAPE = True
-		predator_ob = [ob for ob in cont.getSensor('predator_sensor').getHitObjectList() if (hasattr(ob, 'life')==False or ob.life != 0)]
+		predator_ob = [ob for ob in cont.sensors['predator_sensor'].hitObjectList if (hasattr(ob, 'life')==False or ob.life != 0)]
 		if predator_ob:
 			predator_ob = predator_ob[0]
 		else:
 			# EXIT ESCAPE STATE
 			predator_ob = None
 			
-			GameLogic.addActiveActuator(cont.getActuator('walk_state'), 1)
+			cont.activate('walk_state')
 	
-	own_pos = Vector(own.getPosition())
+	own_pos = Vector(own.worldPosition)
 	
 	'''
-	sens_l= cont.getSensor('RayLeft')
-	sens_r = cont.getSensor('RayRight')
-	sens_l_hitob = sens_l.getHitObject()
-	sens_r_hitob = sens_r.getHitObject()	 
+	sens_l= cont.sensors['RayLeft']
+	sens_r = cont.sensors['RayRight']
+	sens_l_hitob = sens_l.hitObject
+	sens_r_hitob = sens_r.hitObject
 	'''
 	
 	# use python to get rays instead
@@ -286,13 +286,13 @@ def main(cont):
 	elif sens_l_hitob and sens_r_hitob:
 		# print "BOTH OK"
 		# Both collide, so do somtething
-		####lpos =  sens_l.getHitPosition()
+		####lpos =  sens_l.hitPosition
 		ldist = own.getDistanceTo(lpos)
-		####lnor = sens_l.getHitNormal()
+		####lnor = sens_l.hitNormal
 		
-		####rpos =  sens_r.getHitPosition()
+		####rpos =  sens_r.hitPosition
 		rdist = own.getDistanceTo(rpos)
-		####rnor = sens_r.getHitNormal()
+		####rnor = sens_r.hitNormal
 		
 		# print ldist, rdist, 'DIST'
 		
@@ -369,8 +369,9 @@ def main(cont):
 	# print 'DIRECTION', DIRECTION, ldist, rdist
 	if DIRECTION[0] == 0:
 		# print 'NotTurning'
-		actu_motion.setDRot(0,0,0,True)
-		# GameLogic.addActiveActuator(actu_turn, 0)
+		actu_motion.dRot = (0.0, 0.0, 0.0)
+		
+		# cont.deactivate(actu_turn)
 	else:
 		if DIRECTION[0] == 1:
 			# print 'Turning Left'
@@ -378,9 +379,9 @@ def main(cont):
 		elif DIRECTION[0] == 2:
 			# print 'Turning Right'
 			rot = ROTATE_SPEED	
-		actu_motion.setDRot(0,0,rot,True)
+		actu_motion.dRot = (0.0, 0.0, rot)
 	
 	# This is a bit weired, use negative z dloc to stick him to the ground.
-	actu_motion.setDLoc(0,RUN_SPEED,-0.01,True)
+	actu_motion.dLoc = (0.0, RUN_SPEED, -0.01)
 	
-	GameLogic.addActiveActuator(actu_motion, 1)
+	cont.activate(actu_motion)

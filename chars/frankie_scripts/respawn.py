@@ -5,10 +5,10 @@ restores properties and updates the hud.
 import GameLogic
 
 def main(cont):
-	own = cont.getOwner()
+	own = cont.owner
 	
 	# If somthing is carrying us. tell it to not bother anymore.
-	parent = own.getParent()
+	parent = own.parent
 	if parent:
 		if hasattr(parent, 'carrying'):
 			parent.carrying = 0
@@ -17,8 +17,8 @@ def main(cont):
 		
 		own.removeParent()
 		
-	own.setPosition( [float(num) for num in own.orig_pos.split()] )
-	own.setLinearVelocity([0,0,0], 1)
+	own.localPosition = [float(num) for num in own.orig_pos.split()]
+	own.setLinearVelocity((0.0, 0.0, 0.0), True)
 	
 	props = GameLogic.globalDict['PROP_BACKUP'][own.id]
 	

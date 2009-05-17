@@ -25,17 +25,17 @@ def restoreProps(own):
 				print '\trestore prop :', propName, 'did not work'
 	
 def main(cont):
-	own = cont.getOwner()
+	own = cont.owner
 	
 	# turn off timeoffset, almost
-	own_rig = cont.getSensor('rig_linkonly').getOwner() # The rig owns this! - cheating way ti get the rig/
+	own_rig = cont.sensors['rig_linkonly'].owner # The rig owns this! - cheating way ti get the rig/
 	own_rig.timeOffset = own_rig.defTimeOffset
 	
 	last_pos = own.ground_pos_old
 	if last_pos: # this may be false if we just started
-		own.setPosition( [float(num) for num in last_pos.split()] )
+		own.localPosition = [float(num) for num in last_pos.split()]
 	else: # fallback
-		own.setPosition( [float(num) for num in own.orig_pos.split()] )
+		own.localPosition = [float(num) for num in own.orig_pos.split()]
 	
 	restoreProps(own)
 	

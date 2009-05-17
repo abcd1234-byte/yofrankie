@@ -12,12 +12,12 @@ def main(cont):
 	BOOSTED_FAC = 2.0
 	BOOSTED_TIME = 10
 	
-	own = cont.getOwner()
+	own = cont.owner
 	
 	# Z will be between 0 and 1.0
-	Z = 1-((own.getAxisVect([0,0,1])[2] + 1.0) * 0.5)
+	Z = 1-((own.getAxisVect((0.0, 0.0, 1.0))[2] + 1.0) * 0.5)
 	
-	run_actu = cont.getActuator('run_force')
+	run_actu = cont.actuators['run_force']
 	
 	if own.boosted < 0.0:
 		speed = BASE_SPEED*2
@@ -28,5 +28,5 @@ def main(cont):
 	
 	speed += (BASE_SPEED*Z*ANGLE_SPEED)	
 	
-	run_actu.setLinearVelocity(0, speed, 0, 1)
+	run_actu.linV = (0.0, speed, 0.0) # local linv
 

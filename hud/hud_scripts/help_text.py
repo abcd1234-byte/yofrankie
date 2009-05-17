@@ -6,12 +6,12 @@ import GameKeys
 import GameLogic
 
 def main(cont):
-	own = cont.getOwner()
+	own = cont.owner
 	
 	try:	conf = GameLogic.globalDict['CONFIG']
 	except:	conf = GameLogic.globalDict['CONFIG'] = {}
 	
-	children = [(ob.getName(), ob) for ob in own.getChildren()]
+	children = [(ob.name, ob) for ob in own.children]
 	children.sort()
 	
 	obs_p1 = [ pair[1] for pair in children if '_p1' in pair[0] ]
@@ -24,8 +24,8 @@ def main(cont):
 		return
 	
 	# Override key text
-	joy_p1 = cont.getSensor('joy_test_p1').isConnected()
-	joy_p2 = cont.getSensor('joy_test_p2').isConnected()	
+	joy_p1 = cont.sensors['joy_test_p1'].connected
+	joy_p2 = cont.sensors['joy_test_p2'].connected
 	
 	# Always do player 1
 	keys_p1 = []

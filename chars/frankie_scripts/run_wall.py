@@ -7,13 +7,13 @@ import GameLogic
 from Mathutils import CrossVecs, Vector, Matrix, RotationMatrix, AngleBetweenVecs, DotVecs
 
 def main(cont):
-	own = cont.getOwner()
+	own = cont.owner
 	
-	sens_wall_ray = cont.getSensor('wall_ray')
-	sens_wall_time = cont.getSensor('wall_run_time')
-	actu_motion = cont.getActuator('wall_run_motion')
+	sens_wall_ray = cont.sensors['wall_ray']
+	sens_wall_time = cont.sensors['wall_run_time']
+	actu_motion = cont.actuators['wall_run_motion']
 	
-	if not sens_wall_time.isPositive():
+	if not sens_wall_time.positive:
 		# We must turn off this actuator once the time limit sensor
 		# is false, otherwise it will keep benig applied
 		
@@ -21,9 +21,9 @@ def main(cont):
 		# but there is no harm in it either.		
 		# There is a small chance the time will run out but the ray will be hitting somthing.
 		# so just to be sure, always remove motion when the wall timer is false.
-
-		GameLogic.addActiveActuator( actu_motion, False )
-		if not sens_wall_ray.isPositive():
+		
+		cont.deactivate(actu_motion)
+		if not sens_wall_ray.positive:
 			return
 	
 	# when to apply the rebound force from the wall and turn frankie
@@ -32,23 +32,23 @@ def main(cont):
 	
 	REBOUND_LINV = 1.0
 	
-	#if not sens_wall_ray.isPositive():
+	#if not sens_wall_ray.positive:
 	#if 1:
-	if not sens_wall_time.isPositive() and sens_wall_ray.isPositive():
+	if not sens_wall_time.positive and sens_wall_ray.positive:
 		# Either initialize a rebound, of if the angle is low, just run paralelle to the wall
-		wall_nor = Vector(sens_wall_ray.getHitNormal())
+		wall_nor = Vector(sens_wall_ray.hitNormal)
 		wall_nor.z = 0.0
 		
-		own_neg_y = Vector(own.getAxisVect([0,-1,0]))
+		own_neg_y = Vector(own.getAxisVect((0.0, -1.0, 0.0)))
 		own_neg_y.z = 0.0
 		
 		ang = AngleBetweenVecs(own_neg_y, wall_nor) 
 		if ang > 22.5:
 			cross = CrossVecs(wall_nor, own_neg_y)
 			if cross.z > 0.0:
-				paralelle_dir = wall_nor * RotationMatrix(-90, 3, 'z')	
+				paralelle_dir = wall_nor * RotationMatrix(-90.0, 3, 'z')	
 			else:
-				paralelle_dir = wall_nor * RotationMatrix(90, 3, 'z')	
+				paralelle_dir = wall_nor * RotationMatrix(90.0, 3, 'z')	
 			
 			own.alignAxisToVect(paralelle_dir, 1, 0.1)
 			return
@@ -61,22 +61,21 @@ def main(cont):
 			# Set the direction velocity, apply this later
 			
 			''' # Simple direct off wall, not that fun
-			wall_nor = sens_wall_ray.getHitNormal()
-			actu_motion.setLinearVelocity(wall_nor[0]*REBOUND_LINV, wall_nor[1]*REBOUND_LINV, 0.0, 0)
+			wall_nor = sens_wall_ray.hitNormal
+			actu_motion.linV = (wall_nor[0]*REBOUND_LINV, wall_nor[1]*REBOUND_LINV, 0.0)
 			'''
 			
 			# Nicer to reflect
 			wall_nor.normalize()
 			ref = own_neg_y.reflect(wall_nor)
-			actu_motion.setLinearVelocity(ref[0]*REBOUND_LINV, ref[1]*REBOUND_LINV, 0.0, 0)
+			actu_motion.linV = (ref[0]*REBOUND_LINV, ref[1]*REBOUND_LINV, 0.0) # global linV
 			
-			actu_anim = cont.getActuator('run_wall')
-			GameLogic.addActiveActuator( actu_anim, True )
+			cont.activate('run_wall')
 		
 	else:
 		## We are not facing the wall anymore, just orient to the reflection vector
 		# Apply rebound and face that direction
 		if own.wall_run_timer > LIMIT_REBOUND_TIME:
-			vel = actu_motion.getLinearVelocity()[0:3]
+			vel = actu_motion.linV
 			own.alignAxisToVect(vel, 1, 0.2)
-			GameLogic.addActiveActuator( actu_motion, True )
+			cont.activate(actu_motion)

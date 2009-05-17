@@ -20,10 +20,10 @@ def backupProps(own):
 
 
 def main(cont):
-	own = cont.getOwner()
+	own = cont.owner
 	globalDict = GameLogic.globalDict
 	
-	portal_ob = cont.getSensor('portal_touch').getHitObject()
+	portal_ob = cont.sensors['portal_touch'].hitObject
 	
 	if not portal_ob:
 		return
@@ -50,7 +50,7 @@ def main(cont):
 	
 	if blend_name:
 		# todo, allow blend AND scene switching. at the moment can only do blend switching.
-		set_blend_actu = cont.getActuator('portal_blend')
+		set_blend_actu = cont.actuators['portal_blend']
 		set_blend_actu.setFile( blend_name )
 		
 		try:	del globalDict['PLAYER_ID'] # regenerate ID's on restart
@@ -64,12 +64,12 @@ def main(cont):
 				
 		# Backup props
 		backupProps(own)
-				
-		GameLogic.addActiveActuator(set_blend_actu, True)
+		
+		cont.activate(set_blend_actu)
 		
 	elif scene_name:
 		# portal_ob
-		set_scene_actu = cont.getActuator('portal_scene')
+		set_scene_actu = cont.actuators['portal_scene']
 		set_scene_actu.setScene( scene_name )
 		
 		try:	del globalDict['PLAYER_ID'] # regenerate ID's on restart
@@ -81,23 +81,24 @@ def main(cont):
 		# Backup props
 		backupProps(own)
 		
-		GameLogic.addActiveActuator(set_scene_actu, True)
+		cont.activate(set_scene_actu)
 	else:
 		# Simple, only move to the portal.
 		try:
-			target_ob = sce.getObjectList()['OB'+target_name]
+			target_ob = sce.objects['OB'+target_name]
 		except:
 			print 'Oops: portal switch error,', target_name, 'object is not in the scene'
 			return
 		
 		# We may be gliding, make sure there is no timeoffset
-		own_rig = cont.getSensor('rig_linkonly').getOwner() # The rig owns this! - cheating way ti get the rig/
+		own_rig = cont.sensors['rig_linkonly'].owner # The rig owns this! - cheating way ti get the rig/
 		own_rig.timeOffset = own_rig.defTimeOffset
 		
-		own.setPosition( target_ob.getPosition() )
-		own.setOrientation( target_ob.getOrientation() )
-		own.setLinearVelocity([0,0,0])
+		own.localPosition = target_ob.worldPosition
+		own.localOrientation = target_ob.worldOrientation
+		own.setLinearVelocity((0.0, 0.0, 0.0))
 		
 		# set the state incase we are climbing or somthing
-		set_state_actu = cont.getActuator('fall_state_switch')
-		GameLogic.addActiveActuator(set_state_actu, True)
+		set_state_actu = cont.actuators['fall_state_switch']
+		
+		cont.activate(set_state_actu)

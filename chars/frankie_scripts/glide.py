@@ -22,40 +22,35 @@ def main(cont):
 	GLIDE_SLOWPARENT_TIMEOFS = 20.0 # How much delay we should have, (avoids jitter when at maximum pitch)
 	TIME_OFFSET = 1000.0
 	
-	own = cont.getOwner()
-	own_zpos = own.getPosition()[2]
+	own = cont.owner
+	own_zpos = own.worldPosition[2]
 	
 	# If we touch ANYTHING, fall out of glide mode. except for a ledge.
-	collide_any = cont.getSensor('collide_any')	
-	if collide_any.isPositive():
+	collide_any = cont.sensors['collide_any']
+	if collide_any.positive:
 		# If any of these are a bounce object, dont detect a hit.
-		if not [ob_hit for ob_hit in cont.getSensor('collide_any').getHitObjectList() if hasattr(ob_hit, 'bounce')]:
-			if own.grounded:
-				actu_state = cont.getActuator('glide_stop_ground')
-			else:
-				actu_state = cont.getActuator('glide_stop_air')
-			GameLogic.addActiveActuator(actu_state, True)
+		if not [ob_hit for ob_hit in cont.sensors['collide_any'].hitObjectList if hasattr(ob_hit, 'bounce')]:
+			if own.grounded:	cont.activate('glide_stop_ground')
+			else:				cont.activate('glide_stop_air')
 			return
 	
-	own_rig = cont.getSensor('rig_linkonly').getOwner() # The rig owns this! - cheating way ti get the rig/
+	own_rig = cont.sensors['rig_linkonly'].owner # The rig owns this! - cheating way ti get the rig/
 	
 	# print own.getLinearVelocity()
 	# First check if we should quit gliding
-	if cont.getSensor('key_jump_off').isPositive() or own.grounded:
-		if own.grounded:
-			actu_state = cont.getActuator('glide_stop_ground')
-		else:
-			actu_state = cont.getActuator('glide_stop_air')
-		GameLogic.addActiveActuator(actu_state, True)
+	if cont.sensors['key_jump_off'].positive or own.grounded:
+		if own.grounded:	cont.activate('glide_stop_ground')
+		else:				cont.activate('glide_stop_air')
+		
 		own_rig.timeOffset = own_rig.defTimeOffset
 		return
 	
-	KEY_UP = cont.getSensor('key_up').isPositive()
-	if not KEY_UP:	KEY_DOWN = cont.getSensor('key_down').isPositive()
+	KEY_UP = cont.sensors['key_up'].positive
+	if not KEY_UP:	KEY_DOWN = cont.sensors['key_down'].positive
 	else:			KEY_DOWN = False
 	
 	# Initialize the height, so we can disallow ever getting higher
-	if cont.getSensor('true_init_pulse_rep').isPositive():
+	if cont.sensors['true_init_pulse_rep'].positive:
 		own.glide_z_init = own_zpos
 		#### own.glide_swooped = 0
 		jump_time = 0.0
@@ -73,12 +68,12 @@ def main(cont):
 	
 	# pprint jump_time, 'jump_time' 
 	
-	glide= cont.getActuator('glide_py')
+	glide= cont.actuators['glide_py']
 	
 	# Rotation and aligning are now handled in actuators
 	
 	vel = own.getLinearVelocity()
-	own_y = own.getAxisVect([0,1,0])
+	own_y = own.getAxisVect((0.0, 1.0, 0.0))
 	
 	# ------------------------- 
 	# own_y[2] MUST BE BETWEEN GLIDE_PITCH_LIMIT_MIN and GLIDE_PITCH_LIMIT_MAX
@@ -91,7 +86,8 @@ def main(cont):
 	else:			drot_x = 0.0
 	
 	# Set the rotation to tilt forward or back
-	glide.setDRot(drot_x, 0, 0, 1)
+	glide.dRot = (drot_x, 0.0, 0.0) # set to local on the actuator
+	
 	# --------------------------
 	
 	# We COULD just use own_y, but better compensate for the existing 
@@ -166,6 +162,6 @@ def main(cont):
 		new_z = new_z*fac + vel[2]*faci
 		# print "Interpolate",fac
 		
-	glide.setLinearVelocity(new_x, new_y, new_z, 0)
+	glide.linV = new_x, new_y, new_z # set to global on the actuator
 	
-	GameLogic.addActiveActuator(glide, True)
+	cont.activate(glide)

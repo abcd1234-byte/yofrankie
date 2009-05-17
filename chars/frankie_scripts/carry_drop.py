@@ -8,12 +8,12 @@ def main(cont):
 	'''
 	Throw items your carrying ontop of your head
 	'''
-	own = cont.getOwner()
+	own = cont.owner
 	
-	ob_parent = cont.getSensor('carry_pos_linkonly').getOwner()
+	ob_parent = cont.sensors['carry_pos_linkonly'].owner
 	
 	try:
-		own_carry = ob_parent.getChildren()[0]
+		own_carry = ob_parent.children[0]
 	except:
 		# was nothing to carry
 		own.carrying = 0
@@ -27,7 +27,7 @@ def main(cont):
 	if hasattr(own_carry, 'projectile_id'):
 		own_carry.projectile_id = own.id
 	
-	own_y = own.getAxisVect([0,2,0])
+	own_y = own.getAxisVect((0.0, 2.0, 0.0))
 	own_y[2] = 0.0
 	own_carry.setLinearVelocity([own_y[0],own_y[1], 3], 0) # We are carrying sideways
 	

@@ -3,10 +3,10 @@ import GameLogic
 # This file has almost an exact copy in frank.blend - frank_projectile_hit
 def main(cont):
 	PROJECTILE_SPEED = 5.0
-	own = cont.getOwner()
-	#sens = cont.getSensor('projectile_touch')
-	for sens in cont.getSensors():		
-		hit_ob = sens.getHitObject()
+	own = cont.owner
+	#sens = cont.sensors['projectile_touch']
+	for sens in cont.sensors:		
+		hit_ob = sens.hitObject
 		if hit_ob:
 			if hasattr(hit_ob, 'projectile'):
 				s = hit_ob.getLinearVelocity()

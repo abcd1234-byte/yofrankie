@@ -4,7 +4,7 @@ import Rasterizer
 import GameLogic
 
 def main(cont):
-	own= cont.getOwner()
+	own= cont.owner
 	
 	# We are not sure the player has initialized
 	try:
@@ -16,11 +16,11 @@ def main(cont):
 	# Dont show the p2 hud if we are playing single player
 	
 	if PLAYER_COUNT == 1:
-		GameLogic.addActiveActuator( cont.getActuator("end_p2"), True )
+		cont.activate("end_p2")
 	
-	for actu in cont.getActuators():
-		actu_own = actu.getOwner()
-		if actu_own.getName().startswith('OBitem_'):
+	for actu in cont.actuators:
+		actu_own = actu.owner
+		if actu_own.name.startswith('OBitem_'):
 			actu_own.setVisible(False, True) # recursive, sets text invisible also
 	
 	'''
@@ -40,10 +40,10 @@ def main(cont):
 	
 		
 	# own.perspective = 0
-	cont.getActuator("end_p2").getOwner().setPosition(point_p1)
+	cont.actuators["end_p2"].owner.localPosition = point_p1
 	
 	Rasterizer.setMaterialMode(0)
 	
 	'''
-	
-	GameLogic.addActiveActuator( cont.getActuator("hud_monitor_state"), True )
+	cont.activate("hud_monitor_state")
+

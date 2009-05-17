@@ -9,7 +9,7 @@ import GameLogic
 
 def main(cont):
 	
-	own = cont.getOwner()
+	own = cont.owner
 	
 	# See frank_stat_hit, this sets the hit property that triggers this script
 	hit = own.hit
@@ -27,21 +27,20 @@ def main(cont):
 	hud_dict = GameLogic.globalDict['HUD']
 	if own.id == 0:	hud_dict['life_p1'] = own.life
 	else:			hud_dict['life_p2'] = own.life
-	GameLogic.addActiveActuator(cont.getActuator("send_healthchange"), True) #send message to hud telling it to update health
+	cont.activate('send_healthchange') # send message to hud telling it to update health
 
 	# are we dead?
 	if own.life == 0:
-		actu_death = cont.getActuator('dead_state')
-		GameLogic.addActiveActuator( actu_death, True )
+		cont.activate('dead_state')
 		return
 	
 	# Play Hit Anim
 	if own.carrying:
-		GameLogic.addActiveActuator( cont.getActuator('hit'), False )
-		GameLogic.addActiveActuator( cont.getActuator('hit_carry'), True )
+		cont.deactivate('hit')
+		cont.activate('hit_carry')
 	else:
-		GameLogic.addActiveActuator( cont.getActuator('hit_carry'), False )
-		GameLogic.addActiveActuator( cont.getActuator('hit'), True )
+		cont.deactivate('hit_carry')
+		cont.activate('hit')
 	
 	# Always flash color
-	GameLogic.addActiveActuator( cont.getActuator('hit_flashred'), True )
+	cont.activate('hit_flashred')

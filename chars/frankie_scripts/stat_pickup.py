@@ -4,7 +4,7 @@ import GameLogic
 
 def main(cont):
 	
-	own = cont.getOwner()
+	own = cont.owner
 
 	# Cant pickup when hurt
 	print own.hit, own.revive_time
@@ -12,9 +12,9 @@ def main(cont):
 		print "Cant collect items when hit, reviving, carrying or carried"
 		return 
 	
-	sens_pickup = cont.getSensor('pickup_touch')
+	sens_pickup = cont.sensors['pickup_touch']
 	
-	pickup_objects = sens_pickup.getHitObjectList()
+	pickup_objects = sens_pickup.hitObjectList
 	
 	if not pickup_objects or len(pickup_objects) == 0: 
 		return
@@ -37,8 +37,8 @@ def main(cont):
 				own.life = own.life_max
 				
 			GameLogic.frankhealth = own.life	
-			GameLogic.addActiveActuator( cont.getActuator('pickup_flash_life'), True )
-			GameLogic.addActiveActuator( cont.getActuator("send_healthchange"), True )
+			cont.activate('pickup_flash_life')
+			cont.activate('send_healthchange')
 			DONE_PICKUP = LIFE_PICKUP = True
 			
 			
@@ -70,17 +70,16 @@ def main(cont):
 
 	# Play pickup animation only if walking and on the ground.
 	if DONE_PICKUP:
-		# WARNING - test with getState() assumes running 
+		# WARNING - test with state attribute assumes running 
 		# is on state 3, Id prefer not to use these kinds of tests
 		# since running could be moved from state 3 but for now its ok.
-		if own.grounded != 0 and not (cont.getState() & (1<<2)):
-			GameLogic.addActiveActuator( cont.getActuator('pickup_anim'), True )
+		if own.grounded != 0 and not (cont.state & (1<<2)):
+			cont.activate('pickup_anim')
 		if LIFE_PICKUP:
-			GameLogic.addActiveActuator( cont.getActuator('sfx_life_pickup'), True )			
+			cont.activate('sfx_life_pickup')
 			hud_dict = GameLogic.globalDict['HUD']
 			if own.id == 0:	hud_dict['life_p1'] = own.life
 			else:			hud_dict['life_p2'] = own.life
-			GameLogic.addActiveActuator( cont.getActuator('send_healthchange'), True )
+			cont.activate('send_healthchange')
 		else:
-			GameLogic.addActiveActuator( cont.getActuator('sfx_item_pickup'), True )		
-	
+			cont.activate('sfx_item_pickup')

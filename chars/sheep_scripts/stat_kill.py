@@ -28,7 +28,7 @@ def update_hud(cont, own):
 # --- 
 # See frank_stat_hit, this sets the hit property that triggers this script.
 def main(cont):
-	own = cont.getOwner()
+	own = cont.owner
 	
 	# print own.hit, 'own.hit'
 	
@@ -44,9 +44,9 @@ def main(cont):
 		return
 	'''
 	
-	sens_kill = cont.getSensor('hit_detect')
+	sens_kill = cont.sensors['hit_detect']
 	
-	if not sens_kill.isPositive(): # Why would this be false??
+	if not sens_kill.positive: # Why would this be false??
 		return
 	
 	own.life = life = max(own.life - own.hit, 0)
@@ -59,20 +59,19 @@ def main(cont):
 	update_hud(cont, own)
 	
 	# play sound if we have one. make sure name is sfx_*
-	for actu_sound in cont.getActuators():
-		if actu_sound.getName().startswith('sfx_'):
-			GameLogic.addActiveActuator( actu_sound, True )
+	for actu_sound in cont.actuators:
+		if actu_sound.name.startswith('sfx_'):
+			cont.activate(actu_sound)
 	
 	
 	if life == 0:
-		actu_death = cont.getActuator('dead_state')
-		GameLogic.addActiveActuator( actu_death, 1 )
-		
+		cont.activate('dead_state')
 		return
+	
 	"""
 	actu_hit = actu_kicked = None
-	for actu in cont.getActuators():
-		name = actu.getName()
+	for actu in cont.actuators:
+		name = actu.name
 		if name.startswith('hit'):
 			actu_hit = actu
 			break
@@ -88,12 +87,11 @@ def main(cont):
 		if actu_kicked:
 			actu_hit = actu_kicked
 	
-	GameLogic.addActiveActuator( actu_hit, True )
+	cont.activate(actu_hit)
 	"""
 	# State switch time - stop us from switching 
 	
 	# Dont set a new state for a while, play recover anim
 	# own.state_switch_time = -4.0
+	cont.activate('hit_state')
 	
-	actu_idle = cont.getActuator('hit_state')
-	GameLogic.addActiveActuator( actu_idle, True )
