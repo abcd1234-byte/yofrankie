@@ -2,7 +2,7 @@ import GameLogic
 
 # Hit a Kill Object? How much and reset the time.
 
-from Mathutils import CrossVecs, Vector, Matrix, RotationMatrix, AngleBetweenVecs, Rand, DotVecs
+from Mathutils import Vector, Matrix, RotationMatrix, AngleBetweenVecs, Rand
 
 '''
 import GameLogic as g
@@ -66,7 +66,7 @@ def reset_target(own, cont, own_pos, predator_ob):
 			pos = Vector(predator_ob.worldPosition)
 			new_dir = own_pos - pos
 			
-			if DotVecs(new_dir, pred_front) > 0.0:
+			if new_dir.dot(pred_front) > 0.0:
 				ATTACK = False
 			else:
 				ATTACK = True
@@ -123,7 +123,7 @@ def angle_target(own, cont, own_pos):
 	own_y = Vector(own.getAxisVect((0.0, 1.0, 0.0)))
 	own_y.z = 0.0
 	ang = AngleBetweenVecs(own_y, direction)
-	if CrossVecs(direction, own_y).z < 0.0:
+	if direction.cross(own_y).z < 0.0:
 		ang = -ang
 	return ang
 

@@ -4,7 +4,7 @@ either run allongside the wall or reflect off it.
 '''
 import GameLogic
 
-from Mathutils import CrossVecs, Vector, Matrix, RotationMatrix, AngleBetweenVecs, DotVecs
+from Mathutils import Vector, Matrix, RotationMatrix, AngleBetweenVecs
 
 def main(cont):
 	own = cont.owner
@@ -44,7 +44,7 @@ def main(cont):
 		
 		ang = AngleBetweenVecs(own_neg_y, wall_nor) 
 		if ang > 22.5:
-			cross = CrossVecs(wall_nor, own_neg_y)
+			cross = wall_nor.cross(own_neg_y)
 			if cross.z > 0.0:
 				paralelle_dir = wall_nor * RotationMatrix(-90.0, 3, 'z')	
 			else:

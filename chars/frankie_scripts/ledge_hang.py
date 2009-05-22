@@ -1,6 +1,6 @@
 # import frank_ledge_module
 import GameLogic
-from Mathutils import CrossVecs, Vector, Matrix, RotationMatrix, AngleBetweenVecs
+from Mathutils import Vector, Matrix, RotationMatrix, AngleBetweenVecs
 from ledge_test import frankTestLedge, CLIMB_HANG_Y_OFFSET, CLIMB_HANG_Z_OFFSET
 
 def do_reset_timeofs(cont):
@@ -63,7 +63,7 @@ def main(cont):
 	new_z = zpos + CLIMB_HANG_Z_OFFSET
 	own_y = Vector( own.getAxisVect((0.0, 1.0, 0.0)) )
 	ledge_hit = Vector(ledge_hit)
-	cross =CrossVecs(own_y, new_dir)
+	cross =own_y.cross(new_dir)
 	ang = AngleBetweenVecs(own_y, new_dir)
 	
 	# Set Frankies distance from the hit position

@@ -11,7 +11,7 @@ for instance - when throwing, you dont want the object to be thrown right away.
 Once the action is done the "action_name" property is cleared so other actions can be done.
 '''
 import GameLogic
-from Mathutils import Vector, AngleBetweenVecs, CrossVecs
+from Mathutils import Vector, AngleBetweenVecs
 
 
 def side_of_other(own, other):
@@ -22,7 +22,7 @@ def side_of_other(own, other):
 	other_y_vec = Vector(other.getAxisVect( (0.0, 1.0, 0.0) ))
 	relative_vec.z = other_y_vec.z = 0.0
 	
-	if CrossVecs(other_y_vec, relative_vec).z > 0.0:
+	if other_y_vec.cross(relative_vec).z > 0.0:
 		return True
 	else:
 		return False
