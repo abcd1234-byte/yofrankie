@@ -4,23 +4,23 @@
 # this needs to be done because groups cant be moved once added by addObject actuators.
 
 def main(cont):
-	own_add_empty = cont.getOwner()
+	own_add_empty = cont.owner
 	
-	addob_actu = cont.getActuator('splash_create')
+	addob_actu = cont.actuators['splash_create']
 	
-	for sens in cont.getSensors(): # one or more water surface meshes	
+	for sens in cont.sensors: # one or more water surface meshes	
+		ob_water = sens.owner
 		
-		ob_water = sens.getOwner()
-		if not sens.isPositive():
-			continue	
+		if not sens.positive:
+			continue
 		
-		last_ob = addob_actu.getLastCreatedObject()
+		last_ob = addob_actu.objectLastCreated
 		
-		if last_ob:	last_pos = last_ob.getPosition()
+		if last_ob:	last_pos = last_ob.worldPosition
 		else:		last_pos = None
 		
-		for ob in sens.getHitObjectList():
-			pos = ob.getPosition()
+		for ob in sens.hitObjectList:
+			pos = ob.worldPosition
 			
 			if last_pos:
 				dist = abs(pos[0]-last_pos[0]) + abs(pos[1]-last_pos[1])
@@ -30,11 +30,11 @@ def main(cont):
 			#if liquid plane is water, not lava, consider size of object impacting it to add splash, or splash_small
 			if hasattr(ob_water, "water"):
 				if hasattr(ob, "pickup"):
-					addob_actu.setObject("fx_splash_small")
+					addob_actu.object = "fx_splash_small"
 				else:
-					addob_actu.setObject("fx_splash")
+					addob_actu.object = "fx_splash"
 			
-			own_add_empty.setPosition(pos)
+			own_add_empty.localPosition = pos
 			
 			# We want to add multiple so this wont do
 			# GameLogic.addActiveActuator(addob_actu,1)

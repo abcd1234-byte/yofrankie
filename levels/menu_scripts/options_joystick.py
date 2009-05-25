@@ -5,23 +5,22 @@ remove the keyconfig objects if we have them plugged in
 import GameLogic
 
 def main(cont):
-	own = cont.getOwner()
+	own = cont.owner
 	
 	# Only run once
-	if not cont.getSensor('joy_opts_init').isPositive():
+	if not cont.sensors['joy_opts_init'].positive:
 		return
 	
 	# Note, after entering key config, this 
-	
-	joy_p1_connected = cont.getSensor('joy_detect_p1').isConnected()
-	joy_p2_connected = cont.getSensor('joy_detect_p2').isConnected()
+	joy_p1_connected = cont.sensors['joy_detect_p1'].connected
+	joy_p2_connected = cont.sensors['joy_detect_p2'].connected
 	
 	if joy_p1_connected:
-		GameLogic.addActiveActuator( cont.getActuator('end_keys_p1'), True)
-		GameLogic.addActiveActuator( cont.getActuator('set_joy_message_p1'), True)
+		cont.activate('end_keys_p1')
+		cont.activate('set_joy_message_p1')
 		
 	if joy_p2_connected:
-		GameLogic.addActiveActuator( cont.getActuator('end_keys_p2'), True)
-		GameLogic.addActiveActuator( cont.getActuator('set_joy_message_p2'), True)
+		cont.activate('end_keys_p2')
+		cont.activate('set_joy_message_p2')
 	
-	GameLogic.addActiveActuator( cont.getActuator('remove_joy_detect'), True)
+	cont.activate('remove_joy_detect')

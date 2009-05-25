@@ -4,16 +4,15 @@ for the main menu
 '''
 import GameLogic
 
-def main():
-	cont = GameLogic.getCurrentController()
-	own = cont.getOwner()
+def main(cont):
+	own = cont.owner
 	
 	# Only run once
-	if not cont.getSensor('joy_text_init').isPositive():
+	if not cont.sensors['joy_text_init'].positive:
 		return
 	
-	joy_p1_connected = cont.getSensor('joy_detect_p1').isConnected()
-	joy_p2_connected = cont.getSensor('joy_detect_p2').isConnected()
+	joy_p1_connected = cont.sensors['joy_detect_p1'].connected
+	joy_p2_connected = cont.sensors['joy_detect_p2'].connected
 	
 	if joy_p1_connected and joy_p2_connected:
 		own.Text = 'Two joysticks found'
@@ -21,4 +20,3 @@ def main():
 		own.Text = 'one joystick found'
 	else:
 		own.Text = 'no joysticks found'
-	

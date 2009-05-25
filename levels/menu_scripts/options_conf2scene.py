@@ -23,8 +23,8 @@ def main():
 	obs_toggle = []
 	obs_key = []
 	
-	for ob in sce.getObjectList():
-		name = ob.getName()
+	for ob in sce.objects:
+		name = ob.name
 		
 		# Keys are not menu items, they are a special case
 		if name[2:].startswith('KEY_'):
@@ -43,7 +43,7 @@ def main():
 		conf_key = ob.conf_key
 		
 		if conf_key not in conf:
-			print '\tMenu error - item:', ob.getName(), 'uses conf_key:', conf_key, 'not found in GameLogic.globalDict["CONFIG"], ignoring'
+			print '\tMenu error - item:', ob.name, 'uses conf_key:', conf_key, 'not found in GameLogic.globalDict["CONFIG"], ignoring'
 			continue
 		
 		if hasattr(ob, 'radio'):
@@ -51,7 +51,7 @@ def main():
 		elif hasattr(ob, 'toggle'):
 			obs_toggle.append(ob)
 		else:
-			print '\tMenu error - item:', ob.getName(), 'uses conf_key:', conf_key, 'is not a toggle or a radio button, ignoring'
+			print '\tMenu error - item:', ob.name, 'uses conf_key:', conf_key, 'is not a toggle or a radio button, ignoring'
 			
 	
 	# ***************************
@@ -84,8 +84,8 @@ def main():
 	
 	
 	# ***************************
-	# Key Setingszz
-	key_mapping = dict([(ob.getName()[2:].split('.')[0], ob) for ob in obs_key ]) # object names to key names
+	# Key Setings
+	key_mapping = dict([(ob.name[2:].split('.')[0], ob) for ob in obs_key ]) # object names to key names
 
 	def confKeyObSet(opt):
 		try:	ob=	key_mapping[opt]

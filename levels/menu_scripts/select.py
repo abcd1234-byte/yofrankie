@@ -14,8 +14,8 @@ def menu_items(sce):
 	'''
 	Return all names starting with item_ - in a sorted list
 	'''
-	ls = [ob for ob in sce.getObjectList() if ob.getName().startswith(ITEM_PREFIX)]
-	ls.sort(lambda a,b: cmp(a.getName(), b.getName()))
+	ls = [ob for ob in sce.objects if ob.name.startswith(ITEM_PREFIX)]
+	ls.sort(lambda a,b: cmp(a.name, b.name))
 	return ls
 
 def menu_mouse_item_index(cont, own, items):
@@ -23,14 +23,13 @@ def menu_mouse_item_index(cont, own, items):
 	Return the item under the mouse
 	'''
 	# Handle mouse
-	mouse_ob = cont.getSensor('mouse_over').getHitObject()
+	mouse_ob = cont.sensors['mouse_over'].hitObject
 	if not mouse_ob:
 		# Happens so often, dont bother printing
 		# print '\tmouseover: nomouse ob'
 		return -1
 	
-	
-	mouse_obname = mouse_ob.getName()
+	mouse_obname = mouse_ob.name
 	
 	# is this a valid item?
 	if not mouse_obname.startswith(ITEM_PREFIX):
@@ -39,7 +38,7 @@ def menu_mouse_item_index(cont, own, items):
 	
 	# Check this object is in the list
 	for i, ob in enumerate(items):
-		if ob.getName() == mouse_obname:
+		if ob.name == mouse_obname:
 			return i
 	
 	# could not find
@@ -80,8 +79,8 @@ def menu_activate(cont, own, item_ob, items):
 	
 	if blend_name:
 		# todo, allow blend AND scene switching. at the moment can only do blend switching.
-		set_blend_actu = cont.getActuator('portal_blend')
-		set_blend_actu.setFile( blend_name )
+		set_blend_actu = cont.actuators['portal_blend']
+		set_blend_actu.fileName =  blend_name 
 		
 		try:	del globalDict['PLAYER_ID'] # regenerate ID's on restart
 		except:	pass
@@ -92,7 +91,7 @@ def menu_activate(cont, own, item_ob, items):
 		if scene_name:
 			globalDict['PORTAL_SCENENAME'] = scene_name
 		
-		GameLogic.addActiveActuator(set_blend_actu, 1)
+		cont.activate(set_blend_actu)
 		
 		'''
 		SPECIAL CASE - Set GLSL 
@@ -106,8 +105,8 @@ def menu_activate(cont, own, item_ob, items):
 		
 	elif scene_name:
 		# portal_ob
-		set_scene_actu = cont.getActuator('portal_scene')
-		set_scene_actu.setScene( scene_name )
+		set_scene_actu = cont.actuators['portal_scene']
+		set_scene_actu.scene =  scene_name 
 		
 		try:	del globalDict['PLAYER_ID'] # regenerate ID's on restart
 		except:	pass
@@ -115,7 +114,7 @@ def menu_activate(cont, own, item_ob, items):
 		if target_name:
 			globalDict['PORTAL_OBNAME'] = 'OB' + target_name
 		
-		GameLogic.addActiveActuator(set_scene_actu, 1)
+		cont.activate(set_scene_actu)
 	else:
 		# Not a portal
 				
@@ -123,7 +122,7 @@ def menu_activate(cont, own, item_ob, items):
 		
 		if hasattr(item_ob, 'trigger'):
 			# This should have its own logic thats activated on trigger.
-			print "trigger", item_ob.getName()
+			print "trigger", item_ob.name
 			item_ob.trigger = True
 			
 			# Configuration spesific
@@ -139,7 +138,7 @@ def menu_activate(cont, own, item_ob, items):
 			
 			for ob in items:
 				if hasattr(ob, 'conf_key') and ob.conf_key == conf_key:
-					print ob.getName()
+					print ob.name
 					ob.enabled = 0
 			
 			item_ob.enabled = 1
@@ -148,13 +147,11 @@ def menu_activate(cont, own, item_ob, items):
 		# print conf
 
 
-def main():
+def main(cont):
 	'''
 	Take user input and change the active menu or select an item.
 	'''
-	
-	cont = GameLogic.getCurrentController()
-	own = cont.getOwner()
+	own = cont.owner
 	sce = GameLogic.getCurrentScene()
 	
 	items = menu_items(sce)
@@ -183,14 +180,14 @@ def main():
 	
 	# There are a number of sensors that start with "enter_"
 	# use any of these to enter the menu
-	for sens in cont.getSensors():
-		if sens.getName().startswith('enter_') and sens.isPositive():
+	for sens in cont.sensors:
+		if sens.name.startswith('enter_') and sens.positive:
 			KEY_ENTER = True
 			break
 	
 	# The mouse can also enter, but check that its is over a valid item first
 	if KEY_ENTER == False:
-		if cont.getSensor('mouse_click').isPositive():
+		if cont.sensors['mouse_click'].positive:
 			# Its probably safe to assume this index is alredy set
 			# from mouse motion, but assign it anyway just incase.
 			act_click = menu_mouse_item_index(cont, own, items)
@@ -206,12 +203,12 @@ def main():
 	
 	
 	# Get keyup down from keyboard or joystick.
-	KEY_UP = cont.getSensor('key_up').isPositive()
-	KEY_DOWN = cont.getSensor('key_down').isPositive()
-	if not KEY_UP:		KEY_UP =	cont.getSensor('joy_up_p1').isPositive()
-	if not KEY_DOWN:	KEY_DOWN =	cont.getSensor('joy_down_p1').isPositive()
-	if not KEY_UP:		KEY_UP =	cont.getSensor('joy_up_p2').isPositive()
-	if not KEY_DOWN:	KEY_DOWN =	cont.getSensor('joy_down_p2').isPositive()
+	KEY_UP = cont.sensors['key_up'].positive
+	KEY_DOWN = cont.sensors['key_down'].positive
+	if not KEY_UP:		KEY_UP =	cont.sensors['joy_up_p1'].positive
+	if not KEY_DOWN:	KEY_DOWN =	cont.sensors['joy_down_p1'].positive
+	if not KEY_UP:		KEY_UP =	cont.sensors['joy_up_p2'].positive
+	if not KEY_DOWN:	KEY_DOWN =	cont.sensors['joy_down_p2'].positive
 	
 	PLAY_SOUND = False
 	
@@ -232,7 +229,7 @@ def main():
 			
 	else:
 		# If were moving the mouse, find the item under the mouse and set it active
-		if cont.getSensor('mouse_movement').isPositive():			
+		if cont.sensors['mouse_movement'].positive:
 			idx = menu_mouse_item_index(cont, own, items)
 			if idx != -1 and idx != act:
 				items[act].active = False
@@ -244,7 +241,4 @@ def main():
 		# This is done rather then directly accessinng a play sound actuator
 		# because the sound actuator needs a negative event if it is to play
 		# sound over and over again, and the state gives it this negative event.
-		GameLogic.addActiveActuator( cont.getActuator('play_sound'), True )
-		
-		
-
+		cont.activate('play_sound')
