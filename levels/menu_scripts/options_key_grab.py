@@ -43,7 +43,7 @@ def main(cont):
 	conf[conf_dict_key] = key_id
 	
 	# Display the name
-	own_display.Text = GameKeys.EventToString(key_id).replace('ARROW', '').replace('KEY', '').lower()
+	own_display['Text'] = GameKeys.EventToString(key_id).replace('ARROW', '').replace('KEY', '').lower()
 	
 	# Go to next state
 	for actu in cont.actuators:

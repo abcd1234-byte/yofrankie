@@ -13,10 +13,10 @@ def backupProps(own):
 	PROPS = GameLogic.globalDict['PROP_BACKUP'][own.id]
 	# We backed these up, see frank_init
 	# Only backup "life" and inventory -> "item_*"
-	PROPS['life'] = own.life
+	PROPS['life'] = own['life']
 	for propName in own.getPropertyNames():
 		if propName.startswith('item_'):
-			PROPS[propName] = getattr(own, propName)
+			PROPS[propName] = own[propName]
 
 
 def main(cont):
@@ -29,7 +29,7 @@ def main(cont):
 		return
 	
 	sce = GameLogic.getCurrentScene()
-	target_name = portal_ob.portal
+	target_name = portal_ob['portal']
 	
 	# incase the portal was set before
 	# we dont want to use an invalid value
@@ -38,20 +38,14 @@ def main(cont):
 	
 	try:	del globalDict['PORTAL_SCENENAME']
 	except:	pass
-	
-	blend_name = scene_name = ''
-
-
-	if hasattr(portal_ob, 'portal_blend'):	
-		blend_name = portal_ob.portal_blend # No way to check if this really matches up to a scene
-	
-	if hasattr(portal_ob, 'portal_scene'):
-		scene_name = portal_ob.portal_scene # No way to check if this really matches up to a scene
+		
+	blend_name = portal_ob.get('portal_blend', '') # No way to check if this really matches up to a blend
+	scene_name = portal_ob.get('portal_scene', '') # No way to check if this really matches up to a scene
 	
 	if blend_name:
 		# todo, allow blend AND scene switching. at the moment can only do blend switching.
 		set_blend_actu = cont.actuators['portal_blend']
-		set_blend_actu.setFile( blend_name )
+		set_blend_actu.fileName = blend_name
 		
 		try:	del globalDict['PLAYER_ID'] # regenerate ID's on restart
 		except:	pass
@@ -70,7 +64,7 @@ def main(cont):
 	elif scene_name:
 		# portal_ob
 		set_scene_actu = cont.actuators['portal_scene']
-		set_scene_actu.setScene( scene_name )
+		set_scene_actu.scene = scene_name
 		
 		try:	del globalDict['PLAYER_ID'] # regenerate ID's on restart
 		except:	pass

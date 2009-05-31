@@ -13,8 +13,7 @@ def main(cont):
 	HIT_PLAYED = False
 	try:	actu_hit = cont.actuators['sfx_hit']
 	except:	HIT_PLAYED = True
-		
-		
+	
 	
 	#sens = cont.sensors['projectile_touch']
 	for sens in cont.sensors:
@@ -22,20 +21,20 @@ def main(cont):
 		if not hit_ob:
 			continue
 		
-		if hasattr(hit_ob, 'projectile') and hit_ob.projectile_id != own.id:
+		if hit_ob.has_key('projectile') and hit_ob['projectile_id'] != own['id']:
 			s = hit_ob.getLinearVelocity()
 			s = s[0]*s[0] + s[1]*s[1] + s[2]*s[2]
-			print 'hit_speed', s
+			# print 'hit_speed', s
 			# Is this going to hit us???
 			if s > PROJECTILE_SPEED:
-				if hasattr(hit_ob, 'kill'):
-					own.hit = max(hit_ob.kill, own.hit)
+				if hit_ob.has_key('kill'):
+					own.hit = max(hit_ob['kill'], own['hit'])
 				else:
-					own.hit = max(1, own.hit)
+					own.hit = max(1, own['hit'])
+						
+		elif hit_ob.has_key('kill'):
+			own['hit'] = max(hit_ob['kill'], own['hit'])
 			
-		elif hasattr(hit_ob, 'kill'):
-			own.hit = max(hit_ob.kill, own.hit)
-	 		
 			# Play the hit sound if we havnt played it and if its not liquid
-			if HIT_PLAYED == False and not hasattr(hit_ob, 'liquid'):
+			if HIT_PLAYED == False and not hit_ob.has_key('liquid'):
 				cont.activate(actu_hit)

@@ -8,16 +8,16 @@ def main(cont):
 	for sens in cont.sensors:		
 		hit_ob = sens.hitObject
 		if hit_ob:
-			if hasattr(hit_ob, 'projectile'):
+			if hit_ob.has_key('projectile'):
 				s = hit_ob.getLinearVelocity()
 				s = s[0]*s[0] + s[1]*s[1] + s[2]*s[2]
 				# print 'hit_speed', s
 				# Is this going to hit us???
 				if s > PROJECTILE_SPEED:
-					if hasattr(hit_ob, 'kill'):
-						own.hit = max(hit_ob.kill, own.hit)
-						GameLogic.bonecount+=hit_ob.kill #add the amount of health lost to the 'total broken bones' counter
+					if hit_ob.has_key('kill'):
+						own['hit'] = max(hit_ob['kill'], own['hit'])
+						GameLogic.bonecount+=hit_ob['kill'] #add the amount of health lost to the 'total broken bones' counter
 					else:
-						own.hit = max(1, own.hit)
-			elif hasattr(hit_ob, 'kill'):
-				own.hit = max(hit_ob.kill, own.hit)
+						own['hit'] = max(1, own['hit'])
+			elif hit_ob.has_key('kill'):
+				own['hit'] = max(hit_ob['kill'], own['hit'])

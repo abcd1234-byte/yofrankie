@@ -19,8 +19,8 @@ def main(cont):
 	
 	
 	if not conf:
-		for ob in obs_p1:		ob.Text = 'debug'
-		for ob in obs_p2:		ob.Text = 'debug'
+		for ob in obs_p1:		ob['Text'] = 'debug'
+		for ob in obs_p2:		ob['Text'] = 'debug'
 		return
 	
 	# Override key text
@@ -61,5 +61,5 @@ def main(cont):
 				text.append('%s - %s' % (name, val))
 		
 		for i, line in enumerate(text):
-			obs[i].Text = line
+			obs[i]['Text'] = line
 

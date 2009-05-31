@@ -45,7 +45,7 @@ def main(cont):
 			# add to the players bonecount, cheat here a bit, dont actually use the actuator, just get its owner
 			bonecount = hud_dict['bonecount_p' + player_num] + 1
 			hud_dict['bonecount_p' + player_num] = bonecount 
-			cont.actuators['set_bonecount_p' + player_num].owner.Text = '%.4d' % bonecount 
+			cont.actuators['set_bonecount_p' + player_num].owner['Text'] = '%.4d' % bonecount 
 			# Done with bonetext
 	
 		## print '\thud: hitlist - ', hitlist
@@ -63,13 +63,13 @@ def main(cont):
 		
 		for actu in actus_icons:
 			actu_own = actu.owner
-			icon_id = actu_own.id
+			icon_id = actu_own['id']
 			if actu_own.visible == False and icon_id != -1:
 				actu_text = actu_own.children[0]
 				
 				# Invalid again
-				actu_own.id = -1
-				actu_text.Text = ''
+				actu_own['id'] = -1
+				actu_text['Text'] = ''
 				
 				
 				if hitlist:
@@ -88,7 +88,7 @@ def main(cont):
 			hitlist.pop()
 		
 		
-		actus_id = [ actu.owner.id for actu in actus_icons ]
+		actus_id = [ actu.owner['id'] for actu in actus_icons ]
 		
 		i = 0
 		
@@ -115,12 +115,12 @@ def main(cont):
 			# print "\thud debug", icon_mesh_name, current_mesh, icon_text, actu_text.Text, UPDATE_FULL
 			
 			
-			if UPDATE_FULL == False and icon_mesh_name == current_mesh and icon_text == actu_text.Text:
+			if UPDATE_FULL == False and icon_mesh_name == current_mesh and icon_text == actu_text['Text']:
 				# print "NOTHING TO DO"
 				pass
 			else:
-				if icon_text != actu_text.Text:
-					actu_text.Text = icon_text
+				if icon_text != actu_text['Text']:
+					actu_text['Text'] = icon_text
 				
 				if icon_mesh_name != current_mesh:
 					actu.mesh = icon_mesh_name
@@ -128,7 +128,7 @@ def main(cont):
 				
 				
 				actu_own.setVisible(True, True) # recursive, also sets text invisible
-				actu_own.id = id
+				actu_own['id'] = id
 				
 				# A bit sneaky but its quicker to set the state from here. it will turn its self off after.
 				actu_own.state = 1<<15 # state 16

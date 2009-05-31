@@ -15,8 +15,8 @@ def main(cont):
 	joy_p2_connected = cont.sensors['joy_detect_p2'].connected
 	
 	if joy_p1_connected and joy_p2_connected:
-		own.Text = 'Two joysticks found'
+		own['Text'] = 'Two joysticks found'
 	elif joy_p1_connected:
-		own.Text = 'one joystick found'
+		own['Text'] = 'one joystick found'
 	else:
-		own.Text = 'no joysticks found'
+		own['Text'] = 'no joysticks found'

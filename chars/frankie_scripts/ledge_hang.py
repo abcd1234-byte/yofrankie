@@ -11,7 +11,7 @@ def do_reset_timeofs(cont):
 def do_fall_state(own, cont):
 	cont.activate('fall_state')
 	own.setLinearVelocity((0.0, 0.0, 2.0))
-	own.ledge_regrip_timer = 0.0
+	own['ledge_regrip_timer'] = 0.0
 	do_reset_timeofs(cont)
 
 
@@ -46,7 +46,7 @@ def main(cont):
 		return
 	
 	sens_up = cont.sensors['key_up']
-	if sens_up.positive and sens_up.triggered and own.can_climb:
+	if sens_up.positive and sens_up.triggered and own['can_climb']:
 		# own.suspendDynamics()
 		do_reset_timeofs(cont)
 		cont.activate('climb_state')

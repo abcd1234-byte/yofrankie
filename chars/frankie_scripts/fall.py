@@ -38,7 +38,7 @@ def do_clamp_speed(own, cont, velocity):
 	l = velocity_vec.length
 
 
-	if own.boosted:
+	if own['boosted']:
 		MAX_SPEED = 3.0	
 	else:
 		MAX_SPEED = 6.0	
@@ -55,8 +55,8 @@ def do_clamp_speed(own, cont, velocity):
 
 def do_double_jump(own, cont, dropping_dir, actu_dbl_jump_anim, actu_dbl_jump_force):
 	if dropping_dir > DBL_JUMP_FALL_MARGIN: # 0.2 to allow SOME falling
-		if own.jump_time < DBL_JUMP_BEGIN_TIME:
-			own.double_jump = DBL_JUMP_DELAY
+		if own['jump_time'] < DBL_JUMP_BEGIN_TIME:
+			own['double_jump'] = DBL_JUMP_DELAY
 		else:
 			# Do the double jump
 			# print "Reset Actuator 2", actu_dbl_jump_anim.getStart()
@@ -68,12 +68,12 @@ def do_double_jump(own, cont, dropping_dir, actu_dbl_jump_anim, actu_dbl_jump_fo
 			cont.activate(actu_dbl_jump_force)
 			actu_dbl_jump_force = None # Dont disable this
 			
-			own.double_jump = DBL_JUMP_DONE
-			own.jump_time = 100.0 # So we know how long we have jumped for before gliding
+			own['double_jump'] = DBL_JUMP_DONE
+			own['jump_time'] = 100.0 # So we know how long we have jumped for before gliding
 			return True
 	else:
 		# We are falling so set the double jump done so we can glide.
-		own.double_jump = DBL_JUMP_MISSED
+		own['double_jump'] = DBL_JUMP_MISSED
 		return False
 	# Even if we  didnt double jump, tag as done. this way glide works
 	return False
@@ -91,14 +91,14 @@ def do_glide_state(own, cont, velocity):
 		return
 	
 	# print dir(cont.sensors['any_collide'])
-	if	own.double_jump == DBL_JUMP_MISSED  or  \
-		(own.double_jump == DBL_JUMP_DONE  and  own.jump_time > 100.3): # and \
-		# Note, own.jump_time over 100.0 will give a limit so you cant double jump right away
+	if	own['double_jump'] == DBL_JUMP_MISSED  or  \
+		(own['double_jump'] == DBL_JUMP_DONE  and  own['jump_time'] > 100.3): # and \
+		# Note, own['jump_time'] over 100.0 will give a limit so you cant double jump right away
 		
 		
 		# Other logic that didnt work so well
 		# (not cont.sensors['any_collide'].positive):
-		# (own.double_jump == DBL_JUMP_DONE and (actu_dbl_jump_anim.getFrame() > actu_dbl_jump_anim.getEnd()-1.0)):
+		# (own['double_jump'] == DBL_JUMP_DONE and (actu_dbl_jump_anim.frame > actu_dbl_jump_anim.endFrame-1.0)):
 		
 		cont.activate('glide_state')
 
@@ -131,25 +131,25 @@ def main(cont):
 	
 	# Did we just enter this state?
 	if cont.sensors['generic_true_pulse'].positive:
-		if own.jump_time < 0.3:
+		if own['jump_time'] < 0.3:
 			if not KEY_JUMP: # This is very unlikely since we only JUST sstarted jumping. in cases where we fall off a ledge its possible still.
-				own.double_jump = DBL_JUMP_OK # Key is released, we can double jump next time its pressed.
+				own['double_jump'] = DBL_JUMP_OK # Key is released, we can double jump next time its pressed.
 			else:
-				own.double_jump = DBL_JUMP_KEYHELD # We are not sure they were jumping so be sure to check the timer.
+				own['double_jump'] = DBL_JUMP_KEYHELD # We are not sure they were jumping so be sure to check the timer.
 	else:		
 		# Not bouncing
-		if KEY_JUMP or own.double_jump == DBL_JUMP_DELAY:
+		if KEY_JUMP or own['double_jump'] == DBL_JUMP_DELAY:
 			
 			# Cant double jump or glide while carrying.
-			if not own.carrying:
+			if not own['carrying']:
 				
-				if own.double_jump == DBL_JUMP_OK or own.double_jump == DBL_JUMP_DELAY:
+				if own['double_jump'] == DBL_JUMP_OK or own['double_jump'] == DBL_JUMP_DELAY:
 					double_jump_done =  do_double_jump(own, cont, velocity[2], actu_dbl_jump_anim, actu_dbl_jump_force)
 				else:
 					do_glide_state(own, cont, velocity)
 		else:
-			if own.double_jump == DBL_JUMP_KEYHELD:
-				own.double_jump = DBL_JUMP_OK # Key is released, we can double jump next time its pressed.
+			if own['double_jump'] == DBL_JUMP_KEYHELD:
+				own['double_jump'] = DBL_JUMP_OK # Key is released, we can double jump next time its pressed.
 	
 	# If actions are not None, assume we didint want to suse them
 	

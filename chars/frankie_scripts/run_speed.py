@@ -19,7 +19,7 @@ def main(cont):
 	
 	run_actu = cont.actuators['run_force']
 	
-	if own.boosted < 0.0:
+	if own['boosted'] < 0.0:
 		speed = BASE_SPEED*2
 		#print "The Power is ON!"
 	else:

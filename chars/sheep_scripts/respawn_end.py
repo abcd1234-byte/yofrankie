@@ -7,19 +7,19 @@ def main(cont):
 	# they are not right now.
 	own.removeParent()
 	
-	if hasattr(own, 'carried'):	
-		own.carried = 0
+	if own.has_key('carried'):	
+		own['carried'] = 0
 	
-	own.grounded = 0
-	own.attack_type = ''
-	own.life = own.lifemax
+	own['grounded'] = 0
+	own['attack_type'] = ''
+	own['life'] = own['lifemax']
 	
-	if hasattr(own, 'projectile_id'):	
-		own.projectile_id = -1
+	if own.has_key('projectile_id'):	
+		own['projectile_id'] = -1
 	
-	own.target_time = 0.0
-	own.revive_time = 0.0
+	own['target_time'] = 0.0
+	own['revive_time'] = 0.0
 	
 	own.setLinearVelocity((0.0, 0.0, 0.0), 1)
-	own.localPosition = (own.x_orig, own.y_orig, own.z_orig)
+	own.localPosition = (own['x_orig'], own['y_orig'], own['z_orig'])
 	# print "respawn"

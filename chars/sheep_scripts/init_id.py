@@ -9,8 +9,8 @@ def main(cont):
 	
 	own = cont.owner
 	# For respawning.
-	own.x_orig, own.y_orig, own.z_orig = own.worldPosition
-	own.id = ID
+	own['x_orig'], own['y_orig'], own['z_orig'] = own.worldPosition
+	own['id'] = ID
 	# print "setting ID", ID
 
 
@@ -18,19 +18,19 @@ def main(cont):
 	#   since objects in hidden layers will still show up as a sensor.
 
 	# Assign dummy value
-	own.own_rig = 0
+	own['own_rig'] = 0
 	for ob in own.children:
 		name = ob.name[2:]
 		
 		if 'rig_ram' in name:
-			own.type = 'ram'
-			del own.carried, own.projectile, own.kickable
+			own['type'] = 'ram'
+			del own['carried'], own['projectile'], own['kickable']
 			break
 		elif 'rig_sheep' in name:
-			own.type = 'shp'
+			own['type'] = 'shp'
 			break
 		elif 'rig_rat' in name:
-			own.type = 'rat'
+			own['type'] = 'rat'
 			#del own.carried
 			break
 		

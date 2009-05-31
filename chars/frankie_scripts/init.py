@@ -16,6 +16,7 @@ This also uses the configuration to set the GLSL detail options
 # Setup default configuration options
 import GameKeys
 import GameLogic
+import GameTypes
 
 def main(cont):
 	
@@ -88,7 +89,7 @@ def main(cont):
 	own_player = cont.sensors['init_generic'].owner
 	# For respawning.
 
-	own_player.id = ID
+	own_player['id'] = ID
 
 	print 'frank_init: ID:', ID
 
@@ -142,7 +143,7 @@ def main(cont):
 		try:	hud_dict = GameLogic.globalDict['HUD']
 		except:	hud_dict = GameLogic.globalDict['HUD'] = {}
 		
-		hud_dict['life_p%d' % (ID+1)] = own_player.life # will be life_p1 or life_p2
+		hud_dict['life_p%d' % (ID+1)] = own_player['life'] # will be life_p1 or life_p2
 		hud_dict['bonecount_p%d' % (ID+1)] = 0 # will be life_p1 or life_p2
 		
 		# store animals we have hit
@@ -163,8 +164,8 @@ def main(cont):
 		# First see if we have a valid joystick
 		sensors = cont.sensors
 		# print len(sensors), 'sensors'
-		joySensors = [s for s in sensors if hasattr(s, 'connected')]
-		keySensors = [s for s in sensors if hasattr(s, 'key')]
+		joySensors = [s for s in sensors if type(s) == GameTypes.SCA_JoystickSensor]
+		keySensors = [s for s in sensors if type(s) == GameTypes.SCA_KeyboardSensor]
 		
 		own_joy = joySensors[0].owner
 		own_kb = keySensors[0].owner
@@ -222,26 +223,23 @@ def main(cont):
 		
 		if KEY_MAPPING:	
 			for sens in cont.sensors:
-				try:	key = sens.key
-				except:	key = None
-				
-				if key != None:
-					sens.key = KEY_MAPPING[key]
+				if type(sens) == GameTypes.SCA_KeyboardSensor:
+					sens.key = KEY_MAPPING[sens.key]
 		else:
 			print 'Cannot map keys for player ID', ID
 				
 	def backupPosition():
 		# For respawning. run BEFORE backupProps
-		own_player.orig_pos = '%.3f %.3f %.3f' % tuple(own_player.worldPosition)
+		own_player['orig_pos'] = '%.3f %.3f %.3f' % tuple(own_player.worldPosition)
 
 	def backupProps():
 		# These are restored when respawning
 		for propName in own_player.getPropertyNames():
-			PROPS[propName] = getattr(own_player, propName)
+			PROPS[propName] = own_player[propName]
 
 	def restoreProps():
 		for prop, value in PROPS.iteritems():
-			setattr(own_player, prop, value)
+			own_player[prop] = value
 
 	def setPortal():
 		# This may run when entering a new scene, we may be entering from a portal
@@ -315,8 +313,7 @@ def main(cont):
 			Rasterizer.setGLSLMaterialSetting("nodes", 1)
 			Rasterizer.setGLSLMaterialSetting("extra_textures", 1)
 		
-		
-
+	
 	def setup_player():
 		
 		# If the player cant be initialized, dont do anything else

@@ -56,7 +56,7 @@ def main(cont):
 		else:
 			# Rebount! - we're running directly into it
 			
-			own.wall_run_timer = 0.0
+			own['wall_run_timer'] = 0.0
 			
 			# Set the direction velocity, apply this later
 			
@@ -75,7 +75,7 @@ def main(cont):
 	else:
 		## We are not facing the wall anymore, just orient to the reflection vector
 		# Apply rebound and face that direction
-		if own.wall_run_timer > LIMIT_REBOUND_TIME:
+		if own['wall_run_timer'] > LIMIT_REBOUND_TIME:
 			vel = actu_motion.linV
 			own.alignAxisToVect(vel, 1, 0.2)
 			cont.activate(actu_motion)

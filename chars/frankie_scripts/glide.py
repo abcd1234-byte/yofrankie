@@ -4,23 +4,23 @@ This script controlls frankies gliding angle, speed etc
 import GameLogic
 from Mathutils import Vector
 
+TIME_OFFSET = 1000.0
+# Set the velocity when gliding		
+# This is what we had early on, it even works!!!
+
+GLIDE_PITCH_LIMIT_MAX =  0.8 # angle limit, compare with the Z of a unit length Y vector transformed by the objects world matrix.
+GLIDE_PITCH_LIMIT_MIN = -0.8 # ...make sure these match up roughly with 45d constraint that is applied as an actuator
+
+GLIDE_SPEED_LIMIT = 8.0 # Faster you can go the higher you can fly
+GLIDE_SPEED_PITCH = 0.05 # set the DRot to this value when tilting
+GLIDE_SPEED_FALL_ACCEL = 0.009 # How fast we drop when gliding
+GLIDE_SPEED_FALL = -7.0 # -10 makes you fly!
+GLIDE_SPEED_FALL_TIME_FAC = 0.05 # 2.66 # increase GLIDE_SPEED_FALL with the jump speed over time.
+GLIDE_ACCEL = 0.7 # WATCH THIS ONE!
+GLIDE_EASE_IN_TIME = 0.5  # Ease in from current velocity
+GLIDE_SLOWPARENT_TIMEOFS = 20.0 # How much delay we should have, (avoids jitter when at maximum pitch)
+
 def main(cont):
-	
-	# Set the velocity when gliding		
-	# This is what we had early on, it even works!!!
-	
-	GLIDE_PITCH_LIMIT_MAX =  0.8 # angle limit, compare with the Z of a unit length Y vector transformed by the objects world matrix.
-	GLIDE_PITCH_LIMIT_MIN = -0.8 # ...make sure these match up roughly with 45d constraint that is applied as an actuator
-	
-	GLIDE_SPEED_LIMIT = 8.0 # Faster you can go the higher you can fly
-	GLIDE_SPEED_PITCH = 0.05 # set the DRot to this value when tilting
-	GLIDE_SPEED_FALL_ACCEL = 0.009 # How fast we drop when gliding
-	GLIDE_SPEED_FALL = -7.0 # -10 makes you fly!
-	GLIDE_SPEED_FALL_TIME_FAC = 0.05 # 2.66 # increase GLIDE_SPEED_FALL with the jump speed over time.
-	GLIDE_ACCEL = 0.7 # WATCH THIS ONE!
-	GLIDE_EASE_IN_TIME = 0.5  # Ease in from current velocity
-	GLIDE_SLOWPARENT_TIMEOFS = 20.0 # How much delay we should have, (avoids jitter when at maximum pitch)
-	TIME_OFFSET = 1000.0
 	
 	own = cont.owner
 	own_zpos = own.worldPosition[2]
@@ -29,8 +29,8 @@ def main(cont):
 	collide_any = cont.sensors['collide_any']
 	if collide_any.positive:
 		# If any of these are a bounce object, dont detect a hit.
-		if not [ob_hit for ob_hit in cont.sensors['collide_any'].hitObjectList if hasattr(ob_hit, 'bounce')]:
-			if own.grounded:	cont.activate('glide_stop_ground')
+		if not [ob_hit for ob_hit in cont.sensors['collide_any'].hitObjectList if ob_hit.has_key('bounce')]:
+			if own['grounded']:	cont.activate('glide_stop_ground')
 			else:				cont.activate('glide_stop_air')
 			return
 	
@@ -38,11 +38,11 @@ def main(cont):
 	
 	# print own.getLinearVelocity()
 	# First check if we should quit gliding
-	if cont.sensors['key_jump_off'].positive or own.grounded:
+	if cont.sensors['key_jump_off'].positive or own['grounded']:
 		if own.grounded:	cont.activate('glide_stop_ground')
 		else:				cont.activate('glide_stop_air')
 		
-		own_rig.timeOffset = own_rig.defTimeOffset
+		own_rig.timeOffset = own_rig['defTimeOffset']
 		return
 	
 	KEY_UP = cont.sensors['key_up'].positive
@@ -51,17 +51,17 @@ def main(cont):
 	
 	# Initialize the height, so we can disallow ever getting higher
 	if cont.sensors['true_init_pulse_rep'].positive:
-		own.glide_z_init = own_zpos
+		own['glide_z_init'] = own_zpos
 		#### own.glide_swooped = 0
 		jump_time = 0.0
-		own.jump_time = TIME_OFFSET # Reuse this for timing our glide since we cant jump once gliding anyway
+		own['jump_time'] = TIME_OFFSET # Reuse this for timing our glide since we cant jump once gliding anyway
 		
 		own_rig.timeOffset = GLIDE_SLOWPARENT_TIMEOFS
 	else:
-		jump_time = own.jump_time - TIME_OFFSET
+		jump_time = own['jump_time'] - TIME_OFFSET
 		if KEY_UP and jump_time > 1.0:
 			jump_time = ((jump_time-1) * 0.5) + 1
-			own.jump_time = jump_time + TIME_OFFSET
+			own['jump_time'] = jump_time + TIME_OFFSET
 	
 		# Scale down the timeoffset
 		### own_rig.timeOffset *= 0.9
@@ -143,7 +143,7 @@ def main(cont):
 
 	new_z = vel[2] -GLIDE_SPEED_FALL_ACCEL * zoffset
 
-	z_over = own_zpos - own.glide_z_init
+	z_over = own_zpos - own['glide_z_init']
 	if z_over > 0.0:
 		scaler = (1+(z_over*0.2))
 		new_x = new_x / scaler

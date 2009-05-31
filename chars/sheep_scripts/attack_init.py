@@ -3,7 +3,7 @@ import GameLogic
 def main(cont):
 	own = cont.owner
 	
-	if own.type == 'shp':
+	if own['type'] == 'shp':
 		return
 	
 	sens_attack = cont.sensors['predator_collide']
@@ -13,11 +13,11 @@ def main(cont):
 	if not predator_ob:
 		return
 	
-	if not (hasattr( predator_ob, 'hit' ) and hasattr( predator_ob, 'hit' )):
+	if not (predator_ob.has_key('hit' ) and predator_ob.has_key('life')):
 		print '\tattack: predator missing "hit" or "life" property'
 		return
 	
-	if predator_ob.life <= 0:
+	if predator_ob['life'] <= 0:
 		# print '\tattack: predator alredy dead'
 		return
 	

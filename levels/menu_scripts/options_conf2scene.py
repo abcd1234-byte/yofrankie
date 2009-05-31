@@ -35,20 +35,20 @@ def main():
 			continue
 		
 		
-		if not hasattr(ob, 'conf_key'):
+		if not ob.has_key('conf_key'):
 			# This is normal, some items are just triggered.
 			# and are not for configuring
 			continue
 		
-		conf_key = ob.conf_key
+		conf_key = ob['conf_key']
 		
 		if conf_key not in conf:
 			print '\tMenu error - item:', ob.name, 'uses conf_key:', conf_key, 'not found in GameLogic.globalDict["CONFIG"], ignoring'
 			continue
 		
-		if hasattr(ob, 'radio'):
+		if ob.has_key('radio'):
 			obs_radio.append(ob)
-		elif hasattr(ob, 'toggle'):
+		elif ob.has_key('toggle'):
 			obs_toggle.append(ob)
 		else:
 			print '\tMenu error - item:', ob.name, 'uses conf_key:', conf_key, 'is not a toggle or a radio button, ignoring'
@@ -58,7 +58,7 @@ def main():
 	# Radio - for graphics detail
 	radio_items = []
 	for ob in obs_radio:
-		conf_key = ob.conf_key
+		conf_key = ob['conf_key']
 		if conf_key not in radio_items:
 			radio_items.append(conf_key)
 	# for py 2.4+ can use sets
@@ -68,11 +68,11 @@ def main():
 		conf_value = conf[conf_key]
 
 		for ob in obs_radio:
-			if ob.conf_key == conf_key:
-				if ob.radio == conf_value:
-					ob.enabled = 1
+			if ob['conf_key'] == conf_key:
+				if ob['radio'] == conf_value:
+					ob['enabled'] = 1
 				else:
-					ob.enabled = 0
+					ob['enabled'] = 0
 			
 		
 	# ***************************
@@ -80,7 +80,7 @@ def main():
 	## print '\tToggles'
 	for ob in obs_toggle:
 		## print '\tSetting toggle state for', ob.getName(), 'conf_key:', ob.conf_key, 'state:', conf[ob.conf_key]
-		ob.toggle = conf[ob.conf_key]
+		ob['toggle'] = conf[ob['conf_key']]
 	
 	
 	# ***************************
@@ -90,7 +90,7 @@ def main():
 	def confKeyObSet(opt):
 		try:	ob=	key_mapping[opt]
 		except: ob = None
-		if ob:		ob.Text = GameKeys.EventToString(conf[opt]).replace('ARROW', '').replace('KEY', '').lower()
+		if ob:		ob['Text'] = GameKeys.EventToString(conf[opt]).replace('ARROW', '').replace('KEY', '').lower()
 		else:		print 'no object found for', opt
 	
 	keys = [

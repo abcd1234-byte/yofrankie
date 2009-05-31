@@ -1,9 +1,9 @@
 import GameLogic
 
+HIT_MAXDIST = 0.8
+
 def main(cont):
 	own = cont.owner
-	
-	HIT_MAXDIST = 0.8
 	
 	actu_track = cont.actuators['track_predator']
 	predator_ob = actu_track.object # 0 is so we get the object, not the name
@@ -29,7 +29,7 @@ def main(cont):
 	predator_dist = own.getDistanceTo(predator_ob)
 	if predator_dist < HIT_MAXDIST:
 		# print "Hitting frabnkie", predator_ob.name, predator_dist
-		predator_ob.hit = 1
+		predator_ob['hit'] = 1
 	#else:
 	#	print 'frankie got away at!', predator_dist
 	

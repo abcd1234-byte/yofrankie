@@ -27,18 +27,18 @@ def main(cont):
 	
 	# Tell the object it has been bounced on!
 	# It must do its own logic to react
-	if hasattr(hit_ob, 'bounce'):
-		hit_ob.bounce = 1 
+	if hit_ob.has_key('bounce'):
+		hit_ob['bounce'] = 1 
 	
 	KEY_JUMP = cont.sensors['key_jump'].positive
 	
 	# Are we touching a bouncy object?
 	if KEY_JUMP:
 		actu_dbl_bounce_force.linV = (0.0, 0.0, 6.0) # global linv
-		own.double_jump = 0 # DBL_JUMP_KEYHELD
+		own['double_jump'] = 0 # DBL_JUMP_KEYHELD
 	else:
 		actu_dbl_bounce_force.linV = (0.0, 0.0, 4.0) # global linv
-		own.double_jump = 1 # DBL_JUMP_OK
+		own['double_jump'] = 1 # DBL_JUMP_OK
 	
 	cont.activate(actu_dbl_bounce_force)
 	cont.activate('jumping')

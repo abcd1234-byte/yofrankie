@@ -67,14 +67,14 @@ def menu_activate(cont, own, item_ob, items):
 	
 	blend_name = scene_name = target_name = ''
 
-	if hasattr(portal_ob, 'portal'): # check for a spesific object
-		target_name = portal_ob.portal
+	if portal_ob.has_key('portal'): # check for a spesific object
+		target_name = portal_ob['portal']
 	
-	if hasattr(portal_ob, 'portal_blend'):	
-		blend_name = portal_ob.portal_blend # No way to check if this really matches up to a scene
+	if portal_ob.has_key('portal_blend'):	
+		blend_name = portal_ob['portal_blend'] # No way to check if this really matches up to a scene
 	
-	if hasattr(portal_ob, 'portal_scene'):
-		scene_name = portal_ob.portal_scene # No way to check if this really matches up to a scene
+	if portal_ob.has_key('portal_scene'):
+		scene_name = portal_ob['portal_scene'] # No way to check if this really matches up to a scene
 	
 	
 	if blend_name:
@@ -120,29 +120,28 @@ def menu_activate(cont, own, item_ob, items):
 				
 		conf = GameLogic.globalDict['CONFIG']
 		
-		if hasattr(item_ob, 'trigger'):
+		if item_ob.has_key('trigger'):
 			# This should have its own logic thats activated on trigger.
-			print "trigger", item_ob.name
-			item_ob.trigger = True
+			# print "trigger", item_ob.name
+			item_ob['trigger'] = True
 			
 			# Configuration spesific
-		elif hasattr(item_ob, 'toggle'):
-			if item_ob.toggle:	item_ob.toggle = 0
-			else:				item_ob.toggle = 1
+		elif item_ob.has_key('toggle'):
+			item_ob['toggle'] = not item_ob['toggle']
 			
-			if hasattr(item_ob, 'conf_key'):
-				conf[item_ob.conf_key] = item_ob.toggle
+			if item_ob.has_key('conf_key'):
+				conf[item_ob['conf_key']] = item_ob['toggle']
 			
-		elif hasattr(item_ob, 'radio'):
-			conf_key = item_ob.conf_key
+		elif item_ob.has_key('radio'):
+			conf_key = item_ob['conf_key']
 			
 			for ob in items:
-				if hasattr(ob, 'conf_key') and ob.conf_key == conf_key:
+				if ob.get('conf_key') == conf_key:
 					print ob.name
-					ob.enabled = 0
+					ob['enabled'] = 0
 			
-			item_ob.enabled = 1
-			conf[item_ob.conf_key] = item_ob.radio # The index of this radio
+			item_ob['enabled'] = 1
+			conf[item_ob['conf_key']] = item_ob['radio'] # The index of this radio
 		
 		# print conf
 
@@ -163,7 +162,7 @@ def main(cont):
 	# Set all inactive
 	act = -1
 	for i, item in enumerate(items):
-		if item.active:
+		if item['active']:
 			act = i
 			break
 	
@@ -171,9 +170,9 @@ def main(cont):
 		act = 0
 	else:
 		for item in items: # make sure only 1 is active
-			item.active = False
+			item['active'] = False
 	
-	items[act].active = True
+	items[act]['active'] = True
 	
 	
 	KEY_ENTER = False
@@ -215,7 +214,7 @@ def main(cont):
 	if KEY_UP or KEY_DOWN:
 		# Cycle up and down the menu items when key or joystics are pressed.
 		if len(items) > 1:
-			items[act].active = False
+			items[act]['active'] = False
 			
 			if KEY_DOWN:
 				if act+1 == len(items):	act =  0
@@ -224,7 +223,7 @@ def main(cont):
 				if act == 0:			act =  len(items)-1
 				else:					act -= 1
 			
-			items[act].active = True
+			items[act]['active'] = True
 			PLAY_SOUND = True
 			
 	else:
@@ -232,8 +231,8 @@ def main(cont):
 		if cont.sensors['mouse_movement'].positive:
 			idx = menu_mouse_item_index(cont, own, items)
 			if idx != -1 and idx != act:
-				items[act].active = False
-				items[idx].active = True
+				items[act]['active'] = False
+				items[idx]['active'] = True
 				PLAY_SOUND = True
 	
 	if PLAY_SOUND:

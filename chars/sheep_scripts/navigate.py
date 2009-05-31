@@ -39,7 +39,7 @@ def reset_target(own, cont, own_pos, predator_ob):
 	TARGET_DIST_MIN = 2.0
 	TARGET_DIST_MAX = 8.0
 	
-	own.target_time = 0.0
+	own['target_time'] = 0.0
 	
 	L = TARGET_DIST_MIN + (Rand() * (TARGET_DIST_MAX-TARGET_DIST_MIN))
 
@@ -50,15 +50,15 @@ def reset_target(own, cont, own_pos, predator_ob):
 	# we need a random angle between 90 and 270
 	
 	if predator_ob:
-		if own.revive_time < 4.0:
+		if own['revive_time'] < 4.0:
 			# print "recover, escape!"
 			ATTACK = False
-		elif own.type == 'ram':
+		elif own['type'] == 'ram':
 			ATTACK = True
 		
-		elif own.type == 'shp':
+		elif own['type'] == 'shp':
 			ATTACK = False
-		elif own.type == 'rat':
+		elif own['type'] == 'rat':
 			# attack only when frankie is facing away - Sneaky!
 			pred_front = Vector(predator_ob.getAxisVect((0.0, 1.0, 0.0)))
 			pred_front.z = 0.0
@@ -82,13 +82,13 @@ def reset_target(own, cont, own_pos, predator_ob):
 		if ATTACK:
 			# ATTACK!
 			### print 'ATTACK'
-			#own.target_x = pos[0]
-			#own.target_y = pos[1]
+			#own['target_x'] = pos[0]
+			#own['target_y'] = pos[1]
 			new_dir.z = 0
 			new_dir.length = 3 # set target to be 5 past the character.
 			
-			own.target_x = pos[0] - new_dir.x
-			own.target_y = pos[1] - new_dir.y
+			own['target_x'] = pos[0] - new_dir.x
+			own['target_y'] = pos[1] - new_dir.y
 		else:
 			### print 'FLEE'
 			new_dir.z = 0.0
@@ -98,8 +98,8 @@ def reset_target(own, cont, own_pos, predator_ob):
 			ang = (Rand()*45) - (45/2.0)
 			new_dir = new_dir * RotationMatrix(ang, 3, 'z')
 			
-			own.target_x = new_dir.x + own_pos[0]
-			own.target_y = new_dir.y + own_pos[1]
+			own['target_x'] = new_dir.x + own_pos[0]
+			own['target_y'] = new_dir.y + own_pos[1]
 		
 	else:
 		### print 'RANDOM'
@@ -107,13 +107,13 @@ def reset_target(own, cont, own_pos, predator_ob):
 		ang = 90 + (Rand()*180)
 		new_dir = Vector(own_front) * RotationMatrix(ang, 3, 'z')
 			
-		own.target_x = new_dir.x + own_pos[0]
-		own.target_y = new_dir.y + own_pos[1]
+		own['target_x'] = new_dir.x + own_pos[0]
+		own['target_y'] = new_dir.y + own_pos[1]
 		
-	# setpos([own.target_x, own.target_y, 0.0])
+	# setpos([own['target_x'], own['target_y'], 0.0])
 
 def target_direction(own, cont, own_pos):
-	return Vector(own.target_x-own_pos[0], own.target_y-own_pos[1], 0.0)
+	return Vector(own['target_x']-own_pos[0], own['target_y']-own_pos[1], 0.0)
 
 def angle_target(own, cont, own_pos):
 	# Head towards our target 
@@ -132,21 +132,21 @@ def go_target(own, cont, own_pos, predator_ob, TARGET_TIME_LIMIT):
 	# AURIENT_LAG = 0.02
 	
 	# Head towards our target 
-	target_x = own.target_x
-	target_y = own.target_y
+	target_x = own['target_x']
+	target_y = own['target_y']
 	
 	if (target_x==-1.0 and target_y==-1.0):
 		reset_target(own, cont, own_pos, None)
-		target_x = own.target_x
-		target_y = own.target_y
+		target_x = own['target_x']
+		target_y = own['target_y']
 	
 	direction = target_direction(own, cont, own_pos)
 	
 	if	(direction.length < 1.2) or \
-		(own.target_time > TARGET_TIME_LIMIT) or \
-		(predator_ob and own.type in ('ram', 'rat') and own.target_time > 0.15):
+		(own['target_time'] > TARGET_TIME_LIMIT) or \
+		(predator_ob and own['type'] in ('ram', 'rat') and own['target_time'] > 0.15):
 		
-		# print "Over time limit", (direction.length < 1.2), (own.target_time > TARGET_TIME_LIMIT), (predator_ob and own.type=='ram' and own.target_time > 0.15)
+		# print "Over time limit", (direction.length < 1.2), (own['target_time'] > TARGET_TIME_LIMIT), (predator_ob and own['type']=='ram' and own['target_time'] > 0.15)
 		reset_target(own, cont, own_pos, predator_ob)
 	
 	'''
@@ -180,12 +180,12 @@ def main(cont):
 	DIRECTION[0] = 0 # just incase, multiple animals will use this module so must initialize
 	
 	own = cont.owner
-	# print own.type
+	# print own['type']
 	actu_motion = cont.actuators['motion_py']
 	
-	# print own.target_time
+	# print own['target_time']
 	
-	### setpos([own.target_x, own.target_y, 0.0])
+	### setpos([own['target_x'], own['target_y'], 0.0])
 	
 	cont_name = cont.name
 	
@@ -198,14 +198,14 @@ def main(cont):
 		predator_ob = None
 	else:
 		ROTATE_SPEED = 0.1
-		if own.type == 'rat':
+		if own['type'] == 'rat':
 			RUN_SPEED = 0.05
 		else:
 			RUN_SPEED = 0.03
 		
 		TIME_LIMIT = 4.0
 		ESCAPE = True
-		predator_ob = [ob for ob in cont.sensors['predator_sensor'].hitObjectList if (hasattr(ob, 'life')==False or ob.life != 0)]
+		predator_ob = [ob for ob in cont.sensors['predator_sensor'].hitObjectList if ob.get('life', 1) != 0]
 		if predator_ob:
 			predator_ob = predator_ob[0]
 		else:
@@ -245,12 +245,11 @@ def main(cont):
 	
 	# If it has a barrier, respect it
 	
-	if sens_l_hitob and hasattr(sens_l_hitob, 'barrier') or hasattr(sens_l_hitob, 'water') or hasattr(sens_l_hitob, 'lava'):
+	if sens_l_hitob and (sens_l_hitob.has_key('barrier') or sens_l_hitob.has_key('water') or sens_l_hitob.has_key('lava')):
 		sens_l_hitob = None
 		
-	if sens_r_hitob and hasattr(sens_r_hitob, 'barrier') or hasattr(sens_r_hitob, 'water') or hasattr(sens_r_hitob, 'lava'):
+	if sens_r_hitob and (sens_r_hitob.has_key('barrier') or sens_r_hitob.has_key('water') or sens_r_hitob.has_key('lava')):
 		sens_r_hitob = None
-		
 	
 	
 	
@@ -265,22 +264,22 @@ def main(cont):
 	# Check if we are running into frankie while he is reviving, if so turn away.
 	# Do this because otherwise we keep running into frankie after hitting him.
 	for ob in (sens_l_hitob, sens_r_hitob):
-		if ob and hasattr(ob, 'predator') and hasattr(ob, 'revive_time') and ob.revive_time < 1.0:
+		if ob and ob.has_key('predator') and ob.get('revive_time', 100.0) < 1.0:
 			# would be nice to alternate but no big deal
 			DIRECTION[0] = 1
 			RUN_SPEED = 0.0
 			
 			# sets a too close value that is checked above
 			# this means the sheep will turn for a while so it will never jitter
-			own.target_time = -TURN_TIME
+			own['target_time'] = -TURN_TIME
 			break
 	
 	
 	
-	if own.target_time < 0.0:
+	if own['target_time'] < 0.0:
 		# Should this be a state rather then abusing a timer?
 		# This is a bit of a hack. oh well :/
-		# print 'ROTATING!', own.target_time
+		# print 'ROTATING!', own['target_time']
 		DIRECTION[0] = 1
 		RUN_SPEED = 0.0
 	elif sens_l_hitob and sens_r_hitob:
@@ -329,7 +328,7 @@ def main(cont):
 			
 			# sets a too close value that is checked above
 			# this means the sheep will turn for a while so it will never jitter
-			own.target_time = -TURN_TIME
+			own['target_time'] = -TURN_TIME
 			
 		elif abs(ang) > WALL_LIMIT:
 			#print "GO WALL"
@@ -353,11 +352,11 @@ def main(cont):
 		
 		# sets a too close value that is checked above
 		# this means the sheep will turn for a while so it will never jitter
-		own.target_time = -TURN_TIME
+		own['target_time'] = -TURN_TIME
 		
 	elif not sens_l_hitob or not sens_r_hitob:
 		
-		if abs(angle_target(own, cont, own_pos)) < 90 and own.target_time > TIME_LIMIT:
+		if abs(angle_target(own, cont, own_pos)) < 90 and own['target_time'] > TIME_LIMIT:
 			reset_target(own, cont, own_pos, predator_ob)
 		go_target(own, cont, own_pos, predator_ob, TIME_LIMIT)
 		

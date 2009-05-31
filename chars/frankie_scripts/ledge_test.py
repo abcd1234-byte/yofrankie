@@ -8,9 +8,13 @@
 # reload(debug)
 
 import GameLogic, Mathutils
+from Mathutils import Vector
 
 CLIMB_HANG_Y_OFFSET = -0.25
 CLIMB_HANG_Z_OFFSET = -0.35
+
+RAY_LENGTH = 1.0
+RAY_CAST_Z_OFFSET = 0.2
 
 # This module is importedm, not used directly
 def frankTestLedge(own, cont, hit_object, CORRECTION_RAY):
@@ -22,9 +26,6 @@ def frankTestLedge(own, cont, hit_object, CORRECTION_RAY):
 	
 	Return: ray_hit, ray_nor, z_pos
 	'''
-	
-	RAY_LENGTH = 1.0
-	RAY_CAST_Z_OFFSET = 0.2
 
 	if own.carrying or own.carried:
 		print "cant grab - carry!"
@@ -49,7 +50,7 @@ def frankTestLedge(own, cont, hit_object, CORRECTION_RAY):
 		# print "HITUP!!!"
 		#ob_ledge, hit_first, nor_first = own.rayCast(ray_dir, hit_object, RAY_LENGTH)
 		ob_ledge, hit_first, nor_first = own.rayCast(ray_dir, own_pos, RAY_LENGTH)
-		if ob_ledge and ob_ledge.name != hit_object.name:
+		if ob_ledge and ob_ledge != hit_object:
 			print  "Hit Wrong Object, was %s should be %s" % (ob_ledge.name, hit_object.name) # should never happen
 			return None, None, None			
 	else:
@@ -99,7 +100,7 @@ def frankTestLedge(own, cont, hit_object, CORRECTION_RAY):
 	for hit_new, y_axis_new, nor_new in AXIS:
 		
 		# Set the 2D length of this vector to Y_OFFSET
-		y_axis_new = Mathutils.Vector(y_axis_new[0],y_axis_new[1])
+		y_axis_new = Vector(y_axis_new[0],y_axis_new[1])
 		y_axis_new.length = Y_OFFSET
 		
 		# Now cast a new ray down too see the Z posuition of the ledge above us
@@ -114,7 +115,7 @@ def frankTestLedge(own, cont, hit_object, CORRECTION_RAY):
 		ob_ledge, hit_down, nor_down = own.rayCast(new_ray_pos_target, new_ray_pos, 0.5) # Can hit objects of any property, MAYBE should choose ground.
 		
 		if ob_ledge:
-			own.can_climb = 1
+			own['can_climb'] = 1
 			### print "Round nice RAY at pt", hit_down[2]
 			# debug.setpos( hit_down )
 			return hit_new, nor_new, hit_down[2]
@@ -123,7 +124,7 @@ def frankTestLedge(own, cont, hit_object, CORRECTION_RAY):
 	# Ok we will try to find the bugger!
 	# Cast multiple rays, this is not pretty
 	### print "BUGGER, cant climb", ob_closer
-	own.can_climb = 0
+	own['can_climb'] = 0
 	
 	new_ray_pos = own_pos[:] # we only need to adjust its z value
 	if ob_closer:

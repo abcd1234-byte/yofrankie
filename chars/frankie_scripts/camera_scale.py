@@ -15,7 +15,7 @@ def main(cont):
 	ob = sens_wall.hitObject
 	#if ob:	print '\tcamera: rayhit object -', ob.name
 	
-	sorig = own.scaling[0] # assume uniform scale
+	sorig = own.localScale[0] # assume uniform scale
 	
 	if not ob:
 		scale = MAX # 1.0
@@ -28,7 +28,7 @@ def main(cont):
 			ob = parent
 			parent = ob.parent
 			
-			if hasattr(ob, 'carried') and ob.carried != 0:
+			if ob.get('carried', 0) != 0:
 				carry_obstructor = True
 				break
 		
@@ -42,5 +42,5 @@ def main(cont):
 			elif scale < MIN: scale = MIN
 	
 	# Let slow parent deal with interpolation
-	own.scaling = [scale,scale,scale]
+	own.localScale = [scale,scale,scale]
 

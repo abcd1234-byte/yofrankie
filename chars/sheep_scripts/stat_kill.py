@@ -2,7 +2,7 @@ import GameLogic
 
 def update_hud(cont, own):
 	
-	projectile_id = own.projectile_id
+	projectile_id = own['projectile_id']
 	if projectile_id == -1: # we died on our own.
 		return
 	
@@ -10,8 +10,8 @@ def update_hud(cont, own):
 	try:	hitlist = GameLogic.globalDict['HUD']['hitlist_p%d' % (projectile_id+1)]
 	except:	return # Not initialized yet.... ignore for a couble of redraws
 	
-	id = own.id
-	new_item = (id, own.type, own.life, own.lifemax)
+	id = own['id']
+	new_item = (id, own['type'], own['life'], own['lifemax'])
 	
 	DO_INSERT = True
 	for i,item in enumerate(hitlist):
@@ -32,13 +32,13 @@ def main(cont):
 	
 	# print own.hit, 'own.hit'
 	
-	if own.hit==0 or own.revive_time < 1.0:
-		own.hit = 0
+	if own['hit']==0 or own['revive_time'] < 1.0:
+		own['hit'] = 0
 		return
 	
 	# Dont do this, breaks lava death
 	'''
-	if own.grounded == 0:
+	if own['grounded'] == 0:
 		# trigger so will re-run
 		print '\tchar: not on ground, not reacting to hit yet'
 		return
@@ -49,10 +49,10 @@ def main(cont):
 	if not sens_kill.positive: # Why would this be false??
 		return
 	
-	own.life = life = max(own.life - own.hit, 0)
+	own['life'] = life = max(own['life'] - own['hit'], 0)
 	
-	own.hit = 0
-	own.revive_time= 0.0
+	own['hit'] = 0
+	own['revive_time'] = 0.0
 	
 	
 	# Update the hitlist
@@ -81,9 +81,9 @@ def main(cont):
 	
 	# Play Hit Anim
 	print '\nSHEEP WAS HIT!!!!!\n'
-	print 'own.attack_type', own.attack_type
-	if own.attack_type=='kick':
-		own.attack_type = ''
+	print 'own["attack_type"]', own['attack_type']
+	if own['attack_type']=='kick':
+		own['attack_type'] = ''
 		if actu_kicked:
 			actu_hit = actu_kicked
 	
@@ -92,6 +92,6 @@ def main(cont):
 	# State switch time - stop us from switching 
 	
 	# Dont set a new state for a while, play recover anim
-	# own.state_switch_time = -4.0
+	# own['state_switch_time'] = -4.0
 	cont.activate('hit_state')
 	

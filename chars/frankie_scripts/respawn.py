@@ -10,24 +10,24 @@ def main(cont):
 	# If somthing is carrying us. tell it to not bother anymore.
 	parent = own.parent
 	if parent:
-		if hasattr(parent, 'carrying'):
-			parent.carrying = 0
+		if parent.has_key('carrying'):
+			parent['carrying'] = 0
 		else:
 			print '\twarning, parented to a non "carrying" object. should never happen'
 		
 		own.removeParent()
-		
+	
 	own.localPosition = [float(num) for num in own.orig_pos.split()]
 	own.setLinearVelocity((0.0, 0.0, 0.0), True)
 	
-	props = GameLogic.globalDict['PROP_BACKUP'][own.id]
+	props = GameLogic.globalDict['PROP_BACKUP'][own['id']]
 	
 	# We backed these up, see frank_init
 	for prop, value in props.iteritems():
-		setattr(own, prop, value)
+		own[prop] = value
 	
 	# Update the HUD
 	hud_dict = GameLogic.globalDict['HUD']
-	if own.id == 0:	hud_dict['life_p1'] = own.life
-	else:			hud_dict['life_p2'] = own.life
+	if own.id == 0:	hud_dict['life_p1'] = own['life']
+	else:			hud_dict['life_p2'] = own['life']
 	

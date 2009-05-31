@@ -18,11 +18,11 @@ def do_catch(cont, own, ob_carry, ob_catch_bonechild):
 	and catches the first catchable one since its possible we collide with multiple.
 	'''
 	
-	if hasattr(ob_carry, 'grounded') and ob_carry.grounded != 0:
+	if ob_carry.get('grounded', 0) != 0:
 		print '\tcant catch: carry object not airbourne'
 		return False
 	
-	if ob_carry.carried == 1:
+	if ob_carry['carried'] == 1:
 		print '\tcant catch: alredy being carried by another'
 		return False
 	
@@ -47,18 +47,16 @@ def do_catch(cont, own, ob_carry, ob_catch_bonechild):
 	'''
 	
 	# Cannot carry a dead animal
-	if hasattr(ob_carry, 'life') and ob_carry.life <= 0:
+	if ob_carry.get('life', 1) <= 0:
 		print "\tcant catch: cant carry dead"
 		return False
-	
-	
 	
 	
 	# Ok, Checks are done, now execute the catch
 	
 	# Orient the carry objects Z axis to the -Z of the sheep,
 	# since it should be upside down
-	if hasattr(ob_carry, 'type') and ob_carry.type == 'shp':
+	if ob_carry.get('type', '') == 'shp':
 		ob_catch_bonechild.alignAxisToVect(ob_carry.getAxisVect((0.0, 0.0,-1.0)), 2)
 		pos = ob_catch_bonechild.worldPosition
 	else:
@@ -72,7 +70,7 @@ def do_catch(cont, own, ob_carry, ob_catch_bonechild):
 		pos = ob_catch_bonechild.worldPosition
 		
 		# Only for carrying frankie
-		if hasattr(ob_carry, 'predator'):
+		if ob_carry.has_key('predator'):
 			pos[2] -= 0.15
 	
 	
@@ -82,9 +80,9 @@ def do_catch(cont, own, ob_carry, ob_catch_bonechild):
 	ob_carry.localPosition = pos
 	# Dont touch transformation after this!
 	ob_carry.setParent(ob_catch_bonechild)
-	own.force_walk = -1.0
-	own.carrying = 1
-	ob_carry.carried = 1
+	own['force_walk'] = -1.0
+	own['carrying'] = 1
+	ob_carry['carried'] = 1
 	cont.activate('catch')
 	cont.activate('carry_constrain_up')
 
@@ -96,37 +94,37 @@ def main(cont):
 	
 	
 	# We are alredy carrying
-	if own.carrying:
+	if own['carrying']:
 		return # Alredy carrying
 	
 	ob_catch_bonechild = cont.sensors['carry_pos_linkonly'].owner	
 	if ob_catch_bonechild.children:
 		print '\tcarry warning, carrying was not set but had an object in hand! - should never happen, correcting'
-		own.carrying = 1
+		own['carrying'] = 1
 		return
 
 	# Do some sanity checks
-	if own.grounded == 0:
+	if own['grounded'] == 0:
 		print '\tcant catch anything: we are not on the ground'
 		dontCatch(cont)
 		return
 	
 	# Are we falling or doing an action?
-	#	Note! use own.action_done so carrying only stops when the throwing part of the action is done.
+	#	Note! use own['action_done'] so carrying only stops when the throwing part of the action is done.
 	#	otherwise youll drop the object before throwing
 	
 
 	
-	if own.action_done != 0:
+	if own['action_done'] != 0:
 		# Kicking is ok to catch
-		if own.action_name=='' or own.action_name=='kick':
+		if own['action_name'] in ('', 'kick'):
 			pass
 		else:
-			print '\tcant catch anything: midst other action, not doing action', own.action_name, own.action_name
+			print '\tcant catch anything: midst other action, not doing action', own['action_name'], own['action_name']
 			dontCatch(cont)
 			return
 	
-	if own.action_name != '':
+	if own['action_name'] != '':
 		dontCatch(cont)
 		return	
 	

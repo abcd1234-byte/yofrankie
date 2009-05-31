@@ -16,7 +16,7 @@ def main(cont):
 
 	own = cont.owner
 	
-	if own.ledge_regrip_timer < REGRIP_TIME or own.carried or own.carrying:
+	if own['ledge_regrip_timer'] < REGRIP_TIME or own['carried'] or own['carrying']:
 		return
 	
 	sens_ledge = cont.sensors['ledge_collide']

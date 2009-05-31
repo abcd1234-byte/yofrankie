@@ -28,8 +28,8 @@ def main(cont):
 					continue
 			
 			#if liquid plane is water, not lava, consider size of object impacting it to add splash, or splash_small
-			if hasattr(ob_water, "water"):
-				if hasattr(ob, "pickup"):
+			if ob_water.has_key('water'):
+				if ob.has_key('pickup'):
 					addob_actu.object = "fx_splash_small"
 				else:
 					addob_actu.object = "fx_splash"
