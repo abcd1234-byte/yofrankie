@@ -11,6 +11,7 @@ for instance - when throwing, you dont want the object to be thrown right away.
 Once the action is done the "action_name" property is cleared so other actions can be done.
 '''
 import GameLogic
+import GameTypes
 from Mathutils import Vector, AngleBetweenVecs
 
 
@@ -195,7 +196,7 @@ def do_kick(cont, own):
 		ob_kick['projectile_id'] = own['id']
 	
 	if ob_kick.has_key('type'):
-		ob_kick_type = ob_kick.type
+		ob_kick_type = ob_kick['type']
 	else:
 		if ob_kick.has_key('predator'):	
 			ob_kick_type = 'frank'
@@ -412,11 +413,9 @@ def main(cont):
 		own['action_done'] = 0
 			
 		for actu in cont.actuators:
-			try:
+			if type(actu) == GameTypes.BL_ActionActuator:
 				actu.frame = actu.frameStart
 				cont.deactivate(actu)
-			except:
-				pass
 		
 		# Maybe there is a sound?
 		try:

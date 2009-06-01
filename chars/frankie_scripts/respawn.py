@@ -17,7 +17,7 @@ def main(cont):
 		
 		own.removeParent()
 	
-	own.localPosition = [float(num) for num in own.orig_pos.split()]
+	own.localPosition = [float(num) for num in own['orig_pos'].split()]
 	own.setLinearVelocity((0.0, 0.0, 0.0), True)
 	
 	props = GameLogic.globalDict['PROP_BACKUP'][own['id']]

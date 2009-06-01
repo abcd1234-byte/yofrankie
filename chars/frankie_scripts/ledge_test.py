@@ -27,7 +27,7 @@ def frankTestLedge(own, cont, hit_object, CORRECTION_RAY):
 	Return: ray_hit, ray_nor, z_pos
 	'''
 
-	if own.carrying or own.carried:
+	if own['carrying'] or own['carried']:
 		print "cant grab - carry!"
 		return None, None, None
 

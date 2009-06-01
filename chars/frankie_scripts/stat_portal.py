@@ -10,7 +10,7 @@ import GameLogic
 
 def backupProps(own):
 	# We could reset others but these are likely to cause problems
-	PROPS = GameLogic.globalDict['PROP_BACKUP'][own.id]
+	PROPS = GameLogic.globalDict['PROP_BACKUP'][own['id']]
 	# We backed these up, see frank_init
 	# Only backup "life" and inventory -> "item_*"
 	PROPS['life'] = own['life']

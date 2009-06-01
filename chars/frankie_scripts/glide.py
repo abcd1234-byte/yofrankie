@@ -39,7 +39,7 @@ def main(cont):
 	# print own.getLinearVelocity()
 	# First check if we should quit gliding
 	if cont.sensors['key_jump_off'].positive or own['grounded']:
-		if own.grounded:	cont.activate('glide_stop_ground')
+		if own['grounded']:	cont.activate('glide_stop_ground')
 		else:				cont.activate('glide_stop_air')
 		
 		own_rig.timeOffset = own_rig['defTimeOffset']

@@ -5,7 +5,7 @@ from ledge_test import frankTestLedge, CLIMB_HANG_Y_OFFSET, CLIMB_HANG_Z_OFFSET
 
 def do_reset_timeofs(cont):
 	own_rig = cont.sensors['rig_linkonly'].owner # The rig owns this! - cheating way ti get the rig/
-	own_rig.timeOffset = own_rig.defTimeOffset
+	own_rig.timeOffset = own_rig['defTimeOffset']
 
 
 def do_fall_state(own, cont):

@@ -1,0 +1,103 @@
+import GameLogic
+import Mathutils
+from Mathutils import Vector, RotationMatrix
+
+def main(cont):
+	# BOUNCE_FALL_SPEED = 0.0
+	BOUNCE_Z_DIST = 0.2 # How much higher you must be then what you are jumping on.
+	
+	own = cont.getOwner()
+	own_pos = Vector(own.getPosition())
+	
+	sce = GameLogic.getCurrentScene()
+	for ob in sce.getObjectList():
+		print ob.getName()
+	
+	
+	if not cont.getSensor('trigger_warp_script').isPositive():
+		return 
+	
+	actu_add_object = cont.getActuator('add_dyn_portal')
+	
+	# Incase we are called from the main menu
+	blendFiles = GameLogic.getBlendFileList('//')
+	blendFiles += GameLogic.getBlendFileList('//levels')
+	blendFiles += GameLogic.getBlendFileList('//../levels')
+	blendFiles += GameLogic.getBlendFileList('//../../../levels')
+	
+	# Remove doubles
+	# blendFiles	= list(set(blendFiles)) # breaks py2.3
+	blendFiles = dict([(b, None) for b in blendFiles]).keys()
+	
+	blendFiles.sort()
+	
+	for b in blendFiles[:]:
+		# get rid or start_menu, this blend, and any blends not containing minilevel_
+		if 'minilevel_' in b or \
+			'ending.blend' in b or \
+			'library.blend' in b or \
+			'level_selector.blend' in b or \
+			'_backup.blend' in b:
+			
+			blendFiles.remove(b)
+
+			
+	
+	totFiles = len(blendFiles)
+	
+	if not totFiles:
+		print "No Levels Found!"
+		return
+	
+	# Some vars for positioning the portals
+	start = Vector(7,0,0) # rotate this point around to place the portals to new levels
+	
+	
+	totFiles = float(totFiles)
+	print 'PLACING'
+	for i,f in enumerate(blendFiles):
+		ang = 360 * (i/totFiles)
+		print i,f,ang
+		mat = RotationMatrix(ang, 3, 'z')
+		pos_xy = list((start * mat) + own_pos)  # rotate and center around the gamelogic object
+		
+		ray_down = pos_xy[:]
+		ray_down[2] -= 1.0
+		
+		print pos_xy
+		pos_xy[2] = 500 # cast down from on high
+		#pos_xy[2] = 16 # cast down from on high
+		ob_hit, hit_first, nor_first = own.rayCast(ray_down, pos_xy, 1000) # 'ground')
+		if ob_hit:
+			pos_xy[2] = hit_first[2]
+		else:
+			# Rary a ray would ,iss the ground but could happen.
+			pos_xy[2] = own_pos[2] 
+		
+		#own.setPosition(pos_xy)
+		
+		actu_add_object.instantAddObject()
+		new_portal = actu_add_object.getLastCreatedObject()
+		
+		#new_portal.setPosition(hit_first)
+		new_portal.setPosition(pos_xy)
+		new_portal.setOrientation(mat.transpose())
+		if nor_first:
+			new_portal.alignAxisToVect(nor_first, 2)
+		
+		new_portal.portal_blend = '//' + f
+		
+		new_portal_text = new_portal.getChildren()
+		
+		
+		# BUG THIS SHOULD WORK!!!!
+		#new_portal_text.Text = f.replace('_', ' ').split('.')[0]
+		#
+		
+		# Instead add get the text from GameLogic dict
+		
+		
+	
+	# Since we use instantAddObject(), there is no need to activate the actuator
+	# GameLogic.addActiveActuator(actu_add_object, 1)
+	
