@@ -28,9 +28,9 @@ def main(cont):
 			# Is this going to hit us???
 			if s > PROJECTILE_SPEED:
 				if hit_ob.has_key('kill'):
-					own.hit = max(hit_ob['kill'], own['hit'])
+					own['hit'] = max(hit_ob['kill'], own['hit'])
 				else:
-					own.hit = max(1, own['hit'])
+					own['hit'] = max(1, own['hit'])
 						
 		elif hit_ob.has_key('kill'):
 			own['hit'] = max(hit_ob['kill'], own['hit'])

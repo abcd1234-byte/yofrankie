@@ -19,15 +19,16 @@ for i in bpy.data.images:
 				print "\tfixed path", filename_jpg
 				i.filename = replace_ext(filename, 'jpg')
 				change = True
-		
+
+filename = Blender.Get('filename')
 
 if change:
 	# Workaround for G.curscreen being null
-	Blender.Window.SetScreen(Blender.Window.GetScreens()[0])
-	
-	filename = Blender.Get('filename')
+	# in 2.49 this crashes in BG mode
+	# Blender.Window.SetScreen(Blender.Window.GetScreens()[0])
 	print "Saving", filename
 	Blender.Save(filename, True) # True==Overwrite
-
+else:
+	print "No Changes", filename
 # Incase were not running in background mode
-Blender.Quit()
+# Blender.Quit()
