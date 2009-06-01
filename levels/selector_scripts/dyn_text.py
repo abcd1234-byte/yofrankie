@@ -1,10 +1,10 @@
 
 def main(cont):
-	own = cont.getOwner()
-	text = own.getParent().portal_blend
+	own = cont.owner
+	text = own.parent['portal_blend']
 	
 	if 'level_selector' in text:
-		own.Text = 'extra levels'
+		own['Text'] = 'extra levels'
 		return
 	
 	# only needed for the other level selctor
@@ -27,4 +27,4 @@ def main(cont):
 	text = ' '.join(text_split)
 	'''
 	
-	own.Text = text
+	own['Text'] = text

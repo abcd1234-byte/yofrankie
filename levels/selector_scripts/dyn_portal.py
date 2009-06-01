@@ -2,22 +2,22 @@ import GameLogic
 import Mathutils
 from Mathutils import Vector, RotationMatrix
 
+# BOUNCE_FALL_SPEED = 0.0
+BOUNCE_Z_DIST = 0.2 # How much higher you must be then what you are jumping on.
+
 def main(cont):
-	# BOUNCE_FALL_SPEED = 0.0
-	BOUNCE_Z_DIST = 0.2 # How much higher you must be then what you are jumping on.
 	
-	own = cont.getOwner()
-	own_pos = Vector(own.getPosition())
-	
-	sce = GameLogic.getCurrentScene()
-	for ob in sce.getObjectList():
-		print ob.getName()
-	
-	
-	if not cont.getSensor('trigger_warp_script').isPositive():
+	if not cont.sensors['trigger_warp_script'].positive:
 		return 
 	
-	actu_add_object = cont.getActuator('add_dyn_portal')
+	own = cont.owner
+	own_pos = Vector(own.worldPosition)
+	
+	sce = GameLogic.getCurrentScene()
+	#for ob in sce.objects:
+	#	print ob.name
+	
+	actu_add_object = cont.actuators['add_dyn_portal']
 	
 	# Incase we are called from the main menu
 	blendFiles = GameLogic.getBlendFileList('//')
@@ -77,25 +77,21 @@ def main(cont):
 		#own.setPosition(pos_xy)
 		
 		actu_add_object.instantAddObject()
-		new_portal = actu_add_object.getLastCreatedObject()
+		new_portal = actu_add_object.objectLastCreated
 		
 		#new_portal.setPosition(hit_first)
-		new_portal.setPosition(pos_xy)
-		new_portal.setOrientation(mat.transpose())
+		new_portal.worldPosition = pos_xy
+		new_portal.worldOrientation = mat.transpose()
 		if nor_first:
 			new_portal.alignAxisToVect(nor_first, 2)
 		
-		new_portal.portal_blend = '//' + f
-		
-		new_portal_text = new_portal.getChildren()
-		
+		new_portal['portal_blend'] = '//' + f
 		
 		# BUG THIS SHOULD WORK!!!!
-		#new_portal_text.Text = f.replace('_', ' ').split('.')[0]
-		#
-		
-		# Instead add get the text from GameLogic dict
-		
+		'''
+		new_portal_text = new_portal.children
+		new_portal_text.Text = f.replace('_', ' ').split('.')[0]
+		'''
 		
 	
 	# Since we use instantAddObject(), there is no need to activate the actuator
