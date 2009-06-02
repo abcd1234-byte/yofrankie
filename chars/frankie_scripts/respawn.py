@@ -17,6 +17,8 @@ def main(cont):
 		
 		own.removeParent()
 	
+	own.restoreDynamics() # only needed for reviving from lava
+	
 	own.localPosition = [float(num) for num in own['orig_pos'].split()]
 	own.setLinearVelocity((0.0, 0.0, 0.0), True)
 	
