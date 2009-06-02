@@ -74,7 +74,7 @@ def main(cont):
 		if LIFE_PICKUP:
 			cont.activate('sfx_life_pickup')
 			hud_dict = GameLogic.globalDict['HUD']
-			if own.id == 0:	hud_dict['life_p1'] = own['life']
+			if own['id'] == 0:	hud_dict['life_p1'] = own['life']
 			else:				hud_dict['life_p2'] = own['life']
 			cont.activate('send_healthchange')
 		else:

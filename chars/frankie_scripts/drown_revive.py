@@ -33,7 +33,7 @@ def main(cont):
 	if last_pos: # this may be false if we just started
 		own.localPosition = [float(num) for num in last_pos.split()]
 	else: # fallback
-		own.localPosition = [float(num) for num in own.orig_pos.split()]
+		own.localPosition = [float(num) for num in own['orig_pos'].split()]
 	
 	restoreProps(own)
 	
