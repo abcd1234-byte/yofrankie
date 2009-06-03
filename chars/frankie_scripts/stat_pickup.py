@@ -36,7 +36,7 @@ def main(cont):
 			else:
 				own['life'] = own['life_max']
 				
-			GameLogic.frankhealth = own.life	
+			GameLogic.frankhealth = own['life']
 			cont.activate('pickup_flash_life')
 			cont.activate('send_healthchange')
 			DONE_PICKUP = LIFE_PICKUP = True

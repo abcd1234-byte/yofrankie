@@ -7,6 +7,8 @@ def main(cont):
 	# they are not right now.
 	own.removeParent()
 	
+	own.restoreDynamics() # only needed for reviving from lava
+	
 	if own.has_key('carried'):	
 		own['carried'] = 0
 	
