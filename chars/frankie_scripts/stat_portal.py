@@ -20,6 +20,7 @@ def backupProps(own):
 
 
 def main(cont):
+	
 	own = cont.owner
 	globalDict = GameLogic.globalDict
 	
@@ -41,6 +42,19 @@ def main(cont):
 		
 	blend_name = portal_ob.get('portal_blend', '') # No way to check if this really matches up to a blend
 	scene_name = portal_ob.get('portal_scene', '') # No way to check if this really matches up to a scene
+	
+	
+	# A bit dodgy, for the first logic tick show the loading text only
+	# portal collision must be on pulse so its gets a second tick and runs the portal code below.
+	if blend_name or scene_name:
+		for sce in GameLogic.getSceneList():
+			if sce.name == 'hud':
+				loading_ob = sce.objects['OBloading']
+				if not loading_ob.visible:
+					loading_ob.visible = True
+					return
+	# done with loading text!
+	
 	
 	if blend_name:
 		# todo, allow blend AND scene switching. at the moment can only do blend switching.
