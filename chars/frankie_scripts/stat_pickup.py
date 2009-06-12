@@ -26,7 +26,7 @@ def main(cont):
 	for pickup in pickup_objects:
 		# We can either pickup an item or get life!
 		
-		if pickup.has_key('life'): # LIFE PICKUP
+		if 'life' in pickup: # LIFE PICKUP
 			# Play Flash Anim!
 			life_max = own['life_max']
 			life = own['life'] + pickup['life']
@@ -42,7 +42,7 @@ def main(cont):
 			DONE_PICKUP = LIFE_PICKUP = True
 			
 			
-		elif pickup.has_key('boost'): # BOOST PICKUP
+		elif 'boost' in pickup: # BOOST PICKUP
 			# now youll run faster etc
 			# The value for boost is ignored
 			own['boosted'] = -10.0 # As long is its under 0, boost will apply

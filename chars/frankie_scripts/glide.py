@@ -29,7 +29,7 @@ def main(cont):
 	collide_any = cont.sensors['collide_any']
 	if collide_any.positive:
 		# If any of these are a bounce object, dont detect a hit.
-		if not [ob_hit for ob_hit in cont.sensors['collide_any'].hitObjectList if ob_hit.has_key('bounce')]:
+		if not [ob_hit for ob_hit in cont.sensors['collide_any'].hitObjectList if ('bounce' in ob_hit)]:
 			if own['grounded']:	cont.activate('glide_stop_ground')
 			else:				cont.activate('glide_stop_air')
 			return

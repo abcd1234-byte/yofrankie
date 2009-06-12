@@ -10,7 +10,7 @@ def main(cont):
 	# If somthing is carrying us. tell it to not bother anymore.
 	parent = own.parent
 	if parent:
-		if parent.has_key('carrying'):
+		if 'carrying' in parent:
 			parent['carrying'] = 0
 		else:
 			print '\twarning, parented to a non "carrying" object. should never happen'

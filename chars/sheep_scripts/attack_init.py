@@ -13,7 +13,7 @@ def main(cont):
 	if not predator_ob:
 		return
 	
-	if not (predator_ob.has_key('hit' ) and predator_ob.has_key('life')):
+	if not ('hit' in predator_ob and predator_ob.has_key('life')):
 		print '\tattack: predator missing "hit" or "life" property'
 		return
 	

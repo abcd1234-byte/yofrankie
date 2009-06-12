@@ -66,7 +66,7 @@ def do_throw(cont, own):
 	# you can place the 3D cursor to double check these values
 	ob_throw.localPosition = Vector(own.worldPosition) + Vector(own.getAxisVect([0.2, 0.422, 0.455]))
 	
-	if ob_throw.has_key('projectile_id'):
+	if 'projectile_id' in ob_throw:
 		ob_throw['projectile_id'] = own['id'] # so we dont let it his us.
 	ob_throw.setLinearVelocity(own_y_throw)	
 	
@@ -118,7 +118,7 @@ def do_throw_carry(cont, own):
 	# Only add the property if this object has it to start with,
 	# otherwise you could add when throwing a character which messes up
 	# respawning properties works.
-	if own_carry.has_key('projectile_id'):
+	if 'projectile_id' in own_carry:
 		own_carry['projectile_id'] = own['id']
 	
 	own_y = own.getAxisVect( (0.0, 4.0, 0.0) )
@@ -192,13 +192,13 @@ def do_kick(cont, own):
 	
 	
 	# Tell the object we kicked it. so we cant hurt ourselves
-	if ob_kick.has_key('projectile_id'):
+	if 'projectile_id' in ob_kick:
 		ob_kick['projectile_id'] = own['id']
 	
-	if ob_kick.has_key('type'):
+	if 'type' in ob_kick:
 		ob_kick_type = ob_kick['type']
 	else:
-		if ob_kick.has_key('predator'):	
+		if 'predator' in ob_kick:	
 			ob_kick_type = 'frank'
 		else:
 			ob_kick_type = 'unknown'
@@ -300,15 +300,15 @@ def do_tailwhip(cont, own):
 	
 	# On second thaught. make landing hard the part that hurts.
 	# Tell the object to be hit if it has a hit property
-	if ob_whip.has_key('hit'):
+	if 'hit' in ob_whip:
 		ob_whip['hit'] = 1
 		
-		if ob_whip.has_key('projectile_id'):
+		if 'projectile_id' in ob_whip:
 			ob_whip['projectile_id'] = own['id']
 		
 		# Whip not used yet as an attack type ...
 		'''
-		if ob_whip.has_key('attack_type'):
+		if 'attack_type' in ob_whip:
 			ob_kick['attack_type'] = 'whip'
 		else:
 			print 'cant assign whip'

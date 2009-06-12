@@ -9,14 +9,14 @@ def main(cont):
 	
 	own.restoreDynamics() # only needed for reviving from lava
 	
-	if own.has_key('carried'):	
+	if 'carried' in own:
 		own['carried'] = 0
 	
 	own['grounded'] = 0
 	own['attack_type'] = ''
 	own['life'] = own['lifemax']
 	
-	if own.has_key('projectile_id'):	
+	if 'projectile_id' in own:
 		own['projectile_id'] = -1
 	
 	own['target_time'] = 0.0

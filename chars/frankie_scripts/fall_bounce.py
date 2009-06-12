@@ -27,7 +27,7 @@ def main(cont):
 	
 	# Tell the object it has been bounced on!
 	# It must do its own logic to react
-	if hit_ob.has_key('bounce'):
+	if 'bounce' in hit_ob:
 		hit_ob['bounce'] = 1 
 	
 	KEY_JUMP = cont.sensors['key_jump'].positive

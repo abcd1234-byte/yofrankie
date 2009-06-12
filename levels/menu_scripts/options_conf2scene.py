@@ -35,7 +35,7 @@ def main():
 			continue
 		
 		
-		if not ob.has_key('conf_key'):
+		if 'conf_key' not in ob:
 			# This is normal, some items are just triggered.
 			# and are not for configuring
 			continue
@@ -46,9 +46,9 @@ def main():
 			print '\tMenu error - item:', ob.name, 'uses conf_key:', conf_key, 'not found in GameLogic.globalDict["CONFIG"], ignoring'
 			continue
 		
-		if ob.has_key('radio'):
+		if 'radio' in ob:
 			obs_radio.append(ob)
-		elif ob.has_key('toggle'):
+		elif 'toggle' in ob:
 			obs_toggle.append(ob)
 		else:
 			print '\tMenu error - item:', ob.name, 'uses conf_key:', conf_key, 'is not a toggle or a radio button, ignoring'

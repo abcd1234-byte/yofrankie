@@ -67,13 +67,13 @@ def menu_activate(cont, own, item_ob, items):
 	
 	blend_name = scene_name = target_name = ''
 
-	if portal_ob.has_key('portal'): # check for a spesific object
+	if 'portal' in portal_ob: # check for a spesific object
 		target_name = portal_ob['portal']
 	
-	if portal_ob.has_key('portal_blend'):	
+	if 'portal_blend' in portal_ob:	
 		blend_name = portal_ob['portal_blend'] # No way to check if this really matches up to a scene
 	
-	if portal_ob.has_key('portal_scene'):
+	if 'portal_scene' in portal_ob:
 		scene_name = portal_ob['portal_scene'] # No way to check if this really matches up to a scene
 	
 	
@@ -120,19 +120,19 @@ def menu_activate(cont, own, item_ob, items):
 				
 		conf = GameLogic.globalDict['CONFIG']
 		
-		if item_ob.has_key('trigger'):
+		if 'trigger' in item_ob:
 			# This should have its own logic thats activated on trigger.
 			# print "trigger", item_ob.name
 			item_ob['trigger'] = True
 			
 			# Configuration spesific
-		elif item_ob.has_key('toggle'):
+		elif 'toggle' in item_ob:
 			item_ob['toggle'] = not item_ob['toggle']
 			
-			if item_ob.has_key('conf_key'):
+			if 'conf_key' in item_ob:
 				conf[item_ob['conf_key']] = item_ob['toggle']
 			
-		elif item_ob.has_key('radio'):
+		elif 'radio' in item_ob:
 			conf_key = item_ob['conf_key']
 			
 			for ob in items:

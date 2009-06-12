@@ -29,7 +29,7 @@ def main(cont):
 		splash_init()
 		sce = SPLASH_LS[0]
 	
-	is_lava = own.has_key('lava')
+	is_lava = ('lava' in own)
 	
 	
 	for sens in cont.sensors: # one or more water surface meshes	
@@ -40,7 +40,7 @@ def main(cont):
 				if is_lava:
 					ob_add = SPLASH_LS[3]
 				else:
-					if ob.has_key('pickup'):
+					if 'pickup' in ob:
 						ob_add = SPLASH_LS[1]
 					else:
 						ob_add = SPLASH_LS[2]

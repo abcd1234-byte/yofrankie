@@ -245,10 +245,10 @@ def main(cont):
 	
 	# If it has a barrier, respect it
 	
-	if sens_l_hitob and (sens_l_hitob.has_key('barrier') or sens_l_hitob.has_key('water') or sens_l_hitob.has_key('lava')):
+	if sens_l_hitob and ('barrier' in sens_l_hitob or 'water' in sens_l_hitob or 'lava' in sens_l_hitob):
 		sens_l_hitob = None
 		
-	if sens_r_hitob and (sens_r_hitob.has_key('barrier') or sens_r_hitob.has_key('water') or sens_r_hitob.has_key('lava')):
+	if sens_r_hitob and ('barrier' in sens_r_hitob or 'water' in sens_r_hitob or 'lava' in sens_r_hitob):
 		sens_r_hitob = None
 	
 	
@@ -264,7 +264,7 @@ def main(cont):
 	# Check if we are running into frankie while he is reviving, if so turn away.
 	# Do this because otherwise we keep running into frankie after hitting him.
 	for ob in (sens_l_hitob, sens_r_hitob):
-		if ob and ob.has_key('predator') and ob.get('revive_time', 100.0) < 1.0:
+		if ob and 'predator' in ob and ob.get('revive_time', 100.0) < 1.0:
 			# would be nice to alternate but no big deal
 			DIRECTION[0] = 1
 			RUN_SPEED = 0.0

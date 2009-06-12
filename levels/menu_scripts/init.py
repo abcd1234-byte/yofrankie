@@ -10,7 +10,7 @@ def main():
 	except:	conf = GameLogic.globalDict['CONFIG'] = {}
 
 	def confdef(opt, value):
-		if not conf.has_key(opt):
+		if opt not in conf:
 			conf[opt] = value
 	
 	confdef('PLAYER_COUNT', 1)

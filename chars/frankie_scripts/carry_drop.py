@@ -24,7 +24,7 @@ def main(cont):
 	own_carry['carried'] = 0
 	
 	# Tell the object we threw it. so we cant hurt ourselves
-	if own_carry.has_key('projectile_id'):
+	if 'projectile_id' in own_carry:
 		own_carry['projectile_id'] = own['id']
 	
 	own_y = own.getAxisVect((0.0, 2.0, 0.0))

@@ -70,7 +70,7 @@ def do_catch(cont, own, ob_carry, ob_catch_bonechild):
 		pos = ob_catch_bonechild.worldPosition
 		
 		# Only for carrying frankie
-		if ob_carry.has_key('predator'):
+		if 'predator' in ob_carry:
 			pos[2] -= 0.15
 	
 	
