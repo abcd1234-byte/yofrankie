@@ -5,7 +5,7 @@ def main(cont):
 	sens_msg = cont.sensors['hit_list_msg']
 	
 	# Get all messages and update the ID's we need to.
-	messages_player_ids = sens_msg.bodies
+	messages_player_ids = list(sens_msg.bodies) # BUG in 2.49a, not in 2.49 :| "string" in CListValue
 	
 	# checking for a zero length list is not helpful
 	# if we get one, just update both chars
