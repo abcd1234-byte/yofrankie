@@ -15,7 +15,7 @@ def main(cont):
 		
 		if detail==0:
 			end = (lod_level < 2)
-		elif if detail==1:
+		elif detail==1:
 			end = (lod_level < 1)
 		
 		if end:		ob.endObject()
