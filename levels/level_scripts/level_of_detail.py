@@ -11,14 +11,15 @@ def main(cont):
 
 	for ob in sce.objects:
 		lod_level= ob.get('lod_level')
-		end = False
-		
-		if detail==0:
-			end = (lod_level < 2)
-		elif detail==1:
-			end = (lod_level < 1)
-		
-		if end:		ob.endObject()
-		else:		del ob['lod_level']
+		if lod_level != None:
+			end = False
+			
+			if detail==0:
+				end = (lod_level < 2)
+			elif detail==1:
+				end = (lod_level < 1)
+			
+			if end:		ob.endObject()
+			else:		del ob['lod_level']
 		
 	own.endObject()
