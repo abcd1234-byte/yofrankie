@@ -29,7 +29,7 @@ def main(cont):
 				conf[opt] = value
 
 		confdef('PLAYER_COUNT', 2)
-		confdef('GRAPHICS_DETAIL', 2) # 2 == high
+		confdef('GRAPHICS_DETAIL', 1) # 2 == high
 		
 		
 		# Keys
@@ -275,7 +275,16 @@ def main(cont):
 		own_player.localOrientation = target_ob.worldOrientation
 		
 		# Keep GameLogic.PORTAL_OBNAME incase there are more players
-
+		
+		
+		# Annoying, the 'Loading Text', needs to be turned off if we're only 
+		for sce in GameLogic.getSceneList():
+			if sce.name == 'hud':
+				ob = sce.objects.get('OBloading')
+				if ob:
+					ob.visible = False
+					
+					
 
 	def setGfxQuality():
 		import Rasterizer
