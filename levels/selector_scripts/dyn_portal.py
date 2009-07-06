@@ -2,9 +2,6 @@ import GameLogic
 import Mathutils
 from Mathutils import Vector, RotationMatrix
 
-# BOUNCE_FALL_SPEED = 0.0
-BOUNCE_Z_DIST = 0.2 # How much higher you must be then what you are jumping on.
-
 def main(cont):
 	
 	if not cont.sensors['trigger_warp_script'].positive:
@@ -31,17 +28,25 @@ def main(cont):
 	
 	blendFiles.sort()
 	
-	for b in blendFiles[:]:
-		# get rid or start_menu, this blend, and any blends not containing minilevel_
-		if 'minilevel_' in b or \
-			'ending.blend' in b or \
-			'library.blend' in b or \
-			'level_selector.blend' in b or \
-			'_backup.blend' in b:
-			
-			blendFiles.remove(b)
+	
+	if own['mini_level']:
+		# Mini level selector
+		for b in blendFiles[:]:
+			if not('minilevel_' in b or 'level_selector.blend' in b):
+				blendFiles.remove(b)
+	else:
+		# normal level selector
+		for b in blendFiles[:]:
+			# get rid or start_menu, this blend, and any blends not containing minilevel_
+			if 'minilevel_' in b or \
+				'ending.blend' in b or \
+				'library.blend' in b or \
+				'level_selector.blend' in b or \
+				'_backup.blend' in b:
+				
+				blendFiles.remove(b)
 
-			
+	print blendFiles
 	
 	totFiles = len(blendFiles)
 	
@@ -54,10 +59,10 @@ def main(cont):
 	
 	
 	totFiles = float(totFiles)
-	print 'PLACING'
+	# print 'PLACING'
 	for i,f in enumerate(blendFiles):
 		ang = 360 * (i/totFiles)
-		print i,f,ang
+		# print i,f,ang
 		mat = RotationMatrix(ang, 3, 'z')
 		pos_xy = list((start * mat) + own_pos)  # rotate and center around the gamelogic object
 		
@@ -97,3 +102,4 @@ def main(cont):
 	# Since we use instantAddObject(), there is no need to activate the actuator
 	# GameLogic.addActiveActuator(actu_add_object, 1)
 	
+	own.endObject() # may as well distroy, wont use anymore
