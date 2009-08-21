@@ -26,14 +26,14 @@ def menu_mouse_item_index(cont, own, items):
 	mouse_ob = cont.sensors['mouse_over'].hitObject
 	if not mouse_ob:
 		# Happens so often, dont bother printing
-		# print '\tmouseover: nomouse ob'
+		# print('\tmouseover: nomouse ob')
 		return -1
 	
 	mouse_obname = mouse_ob.name
 	
 	# is this a valid item?
 	if not mouse_obname.startswith(ITEM_PREFIX):
-		print '\tmouseover: mouse ob name is wrong', mouse_obname
+		print('\tmouseover: mouse ob name is wrong', mouse_obname)
 		return -1
 	
 	# Check this object is in the list
@@ -42,7 +42,7 @@ def menu_mouse_item_index(cont, own, items):
 			return i
 	
 	# could not find
-	print '\tmouseover: mouse ob no matches', mouse_obname
+	print('\tmouseover: mouse ob no matches', mouse_obname)
 	return -1
 				
 	
@@ -122,7 +122,7 @@ def menu_activate(cont, own, item_ob, items):
 		
 		if 'trigger' in item_ob:
 			# This should have its own logic thats activated on trigger.
-			# print "trigger", item_ob.name
+			# print("trigger", item_ob.name)
 			item_ob['trigger'] = True
 			
 			# Configuration spesific
@@ -137,13 +137,13 @@ def menu_activate(cont, own, item_ob, items):
 			
 			for ob in items:
 				if ob.get('conf_key') == conf_key:
-					print ob.name
+					print(ob.name)
 					ob['enabled'] = 0
 			
 			item_ob['enabled'] = 1
 			conf[item_ob['conf_key']] = item_ob['radio'] # The index of this radio
 		
-		# print conf
+		# print(conf)
 
 
 def main(cont):
@@ -156,7 +156,7 @@ def main(cont):
 	items = menu_items(sce)
 	
 	if not items:
-		print 'error: no object starting with "item_" exiting, is this scene a menu?'
+		print('error: no object starting with "item_" exiting, is this scene a menu?')
 		return
 	
 	# Set all inactive

@@ -36,7 +36,7 @@ def main(cont):
 	
 	own_rig = cont.sensors['rig_linkonly'].owner # The rig owns this! - cheating way ti get the rig/
 	
-	# print own.getLinearVelocity()
+	# print(own.getLinearVelocity())
 	# First check if we should quit gliding
 	if cont.sensors['key_jump_off'].positive or own['grounded']:
 		if own['grounded']:	cont.activate('glide_stop_ground')
@@ -66,7 +66,7 @@ def main(cont):
 		# Scale down the timeoffset
 		### own_rig.timeOffset *= 0.9
 	
-	# pprint jump_time, 'jump_time' 
+	# pprint(jump_time, 'jump_time')
 	
 	glide= cont.actuators['glide_py']
 	
@@ -115,7 +115,7 @@ def main(cont):
 	# Calculate Z Offset
 	fac = GLIDE_SPEED_FALL_TIME_FAC*jump_time
 	zoffset = GLIDE_SPEED_FALL + fac*fac # jump time means start for gliding here
-	# print zoffset
+	# print(zoffset)
 	if zoffset>10.0:
 		zoffset=10.0
 	
@@ -160,7 +160,7 @@ def main(cont):
 		new_x = new_x*fac + vel[0]*faci
 		new_y = new_y*fac + vel[1]*faci
 		new_z = new_z*fac + vel[2]*faci
-		# print "Interpolate",fac
+		# print("Interpolate",fac)
 		
 	glide.linV = new_x, new_y, new_z # set to global on the actuator
 	

@@ -20,7 +20,7 @@ def restoreProps(own):
 			pass # Keep these props
 		else:
 			try:		own[propName] = PROPS[propName]
-			except:	print '\trestore prop :', propName, 'did not work'
+			except:	print('\trestore prop :', propName, 'did not work')
 	
 def main(cont):
 	own = cont.owner

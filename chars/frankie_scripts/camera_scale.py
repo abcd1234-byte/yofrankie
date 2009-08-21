@@ -13,7 +13,7 @@ def main(cont):
 	sens_wall = cont.sensors['camera_ray']
 	
 	ob = sens_wall.hitObject
-	#if ob:	print '\tcamera: rayhit object -', ob.name
+	#if ob:	print('\tcamera: rayhit object -', ob.name)
 	
 	sorig = own.localScale[0] # assume uniform scale
 	

@@ -11,7 +11,7 @@ def main(cont):
 	# For respawning.
 	own['x_orig'], own['y_orig'], own['z_orig'] = own.worldPosition
 	own['id'] = ID
-	# print "setting ID", ID
+	# print("setting ID", ID
 
 
 	# Warning!!! This only works when inside dupliGroups

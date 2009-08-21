@@ -95,7 +95,7 @@ def main(cont):
 		try:
 			target_ob = sce.objects['OB'+target_name]
 		except:
-			print 'Oops: portal switch error,', target_name, 'object is not in the scene'
+			print('Oops: portal switch error,', target_name, 'object is not in the scene')
 			return
 		
 		# We may be gliding, make sure there is no timeoffset

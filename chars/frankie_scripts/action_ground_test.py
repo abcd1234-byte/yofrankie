@@ -7,7 +7,6 @@ import GameLogic
 
 def main(cont):
 	own = cont.owner
-	# print dir(cont)
 	
 	# Cant land while being carried
 	if own['carried']:
@@ -22,17 +21,17 @@ def main(cont):
 	# Note, cont.sensors['ground_ray'] sensor isnt strictly needed however adding this avoids jitter when running over bumps.
 	if sens_touchGround.positive or (cont.sensors['ground_ray'].positive and own['jump_time'] > 0.5):
 		if own['grounded'] == 0: # was flying
-			# print own.getLinearVelocity()[2], 'own.getLinearVelocity()[2]'
-			# print own.jump_time, 'own.jump_time' 
+			# print(own.getLinearVelocity()[2], 'own.getLinearVelocity()[2]')
+			# print(own.jump_time, 'own.jump_time')
 			
 			# Change the state
 			cont.activate('idle_state')
 			own['grounded'] = 1
 			
-			# print " SETTING ON GROUND "
+			# print(" SETTING ON GROUND ")
 	else: # off the ground
 		if own['grounded'] == 1: # just left the ground
 			# Change the state
 			cont.activate('fall_state')
 			own['grounded'] = 0
-			# print " SETTING ON AIR "
+			# print(" SETTING ON AIR ")

@@ -40,7 +40,7 @@ def do_throw(cont, own):
 		return # nothing to throw
 	
 	if not throw_item_ob.startswith( 'item_' ):
-		print '\twarning: throw item inavlid, must "item_" prefix -',throw_item_ob
+		print('\twarning: throw item inavlid, must "item_" prefix -',throw_item_ob)
 		own['throw_item'] = ''
 		return
 	
@@ -49,8 +49,8 @@ def do_throw(cont, own):
 	try:
 		throw_actu.object = throw_item_ob
 	except:
-		print '\twarning: could not find object to throw'
-		print '\tmissing from scene. Add it to a background layer:', throw_item_ob
+		print('\twarning: could not find object to throw')
+		print('\tmissing from scene. Add it to a background layer:', throw_item_ob)
 		return
 	
 	
@@ -104,8 +104,8 @@ def do_throw_carry(cont, own):
 	try:
 		own_carry = ob_parent.children[0]
 	except:
-		print 'frankie.carrying was set to 1 but was carry nothing. should never happen'
-		print 'this is a bug'
+		print('frankie.carrying was set to 1 but was carry nothing. should never happen')
+		print('this is a bug')
 		own['carrying'] = 0
 		return
 	
@@ -177,14 +177,14 @@ def do_kick(cont, own):
 	
 	'''
 	if not ob_kick.get('grounded', 1):
-		print 'cant kick airbourne objects'
+		print('cant kick airbourne objects')
 		return
 	'''
 	
 	
 	
 	if ob_kick.get('carried', 0):
-		print '\tkick: cant kick object being carried'
+		print('\tkick: cant kick object being carried')
 		return
 	
 	
@@ -203,7 +203,7 @@ def do_kick(cont, own):
 		else:
 			ob_kick_type = 'unknown'
 	
-	# print 'ObKick_Type', ob_kick_type
+	# print('ObKick_Type', ob_kick_type)
 	
 	if ob_kick_type == 'rat':
 		# rats are like footballs
@@ -262,7 +262,7 @@ def do_kick(cont, own):
 		ob_kick.setLinearVelocity(kick_dir, 0)
 		
 		# do nothing or rams? just play animations
-		print 'unknown kick type...', ob_kick_type
+		print('unknown kick type...', ob_kick_type)
 		
 		
 	
@@ -311,10 +311,10 @@ def do_tailwhip(cont, own):
 		if 'attack_type' in ob_whip:
 			ob_kick['attack_type'] = 'whip'
 		else:
-			print 'cant assign whip'
+			print('cant assign whip')
 		'''
 	else:
-		print '\twarning: object cant be hurt when whipped:', ob_kick.name
+		print('\twarning: object cant be hurt when whipped:', ob_kick.name)
 
 def main(cont):
 	own = cont.owner
@@ -323,7 +323,7 @@ def main(cont):
 	DEBUG=False
 	
 	
-	if DEBUG: print '###ATTEMPTING ACTION', own['carrying'], own['action_name']
+	if DEBUG: print('###ATTEMPTING ACTION', own['carrying'], own['action_name'])
 	
 	# Warning - This could be called by carry collider, special case- we need it to know what object were carrying
 	# but dont want to do an action for every time it collides
@@ -364,7 +364,7 @@ def main(cont):
 		if action_name == '': # key triggered
 			# Can We Throw?
 			if own['throw_item'] == '':
-				if DEBUG: print '### NOTHING TO THROW, RET'
+				if DEBUG: print('### NOTHING TO THROW, RET')
 				return
 			
 			own['force_walk'] =  -1.0
@@ -375,7 +375,7 @@ def main(cont):
 	elif action_name == 'kick' or (action_name=='' and kick_raytest(cont, own) and KEY_KICK):
 		
 		if own['carried']: # Cant carry and kick
-			if DEBUG: print '### CANT CARRY and kick, RET'
+			if DEBUG: print('### CANT CARRY and kick, RET')
 			return
 		
 		# Ok, do kick
@@ -404,7 +404,7 @@ def main(cont):
 		
 	# This shouldnt happen, but when it does there is nothing we can do.
 	if action_name == '' or do_action_function == None:
-		if DEBUG: print '###COULD NOT DO ACTION, RET'
+		if DEBUG: print('###COULD NOT DO ACTION, RET')
 		return
 	
 	# Are we initializeing? Dont do anything, we need the frame o be zero'd first
@@ -419,14 +419,14 @@ def main(cont):
 		
 		# Maybe there is a sound?
 		try:
-			if DEBUG: print "ATTEMP TO PLAY SOUND", action_name
+			if DEBUG: print("ATTEMP TO PLAY SOUND", action_name)
 			cont.activate(action_name + '_snd')
 		except:
 			pass
-		if DEBUG: print '###INIT ONLY, RET'
+		if DEBUG: print('###INIT ONLY, RET')
 		return
 	
-	# print action_name
+	# print(action_name)
 	actu_action = cont.actuators[action_name] # action
 		
 	firstFrame = actu_action.frameStart

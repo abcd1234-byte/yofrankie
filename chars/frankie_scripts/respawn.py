@@ -13,7 +13,7 @@ def main(cont):
 		if 'carrying' in parent:
 			parent['carrying'] = 0
 		else:
-			print '\twarning, parented to a non "carrying" object. should never happen'
+			print('\twarning, parented to a non "carrying" object. should never happen')
 		
 		own.removeParent()
 	

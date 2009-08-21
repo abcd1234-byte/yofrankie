@@ -19,24 +19,24 @@ def do_catch(cont, own, ob_carry, ob_catch_bonechild):
 	'''
 	
 	if ob_carry.get('grounded', 0) != 0:
-		print '\tcant catch: carry object not airbourne'
+		print('\tcant catch: carry object not airbourne')
 		return False
 	
 	if ob_carry['carried'] == 1:
-		print '\tcant catch: alredy being carried by another'
+		print('\tcant catch: alredy being carried by another')
 		return False
 	
 	ob_carry_pos = ob_carry.worldPosition
 	
 	if ob_carry_pos[2] < own_pos[2]+0.1:
-		print '\tcant catch: catch objects Z position too low'
+		print('\tcant catch: catch objects Z position too low')
 		return False
 	
 	# is it falling down?
 	# - Note, dont do this. once its hit your head its velovcity changes so we cant rely on it
 	'''
 	if ob_carry.getLinearVelocity()[2] > 0.0:
-		print "\tcarry? not falling"
+		print("\tcarry? not falling")
 		return False
 	'''
 	# Is it close enough to the center?
@@ -48,7 +48,7 @@ def do_catch(cont, own, ob_carry, ob_catch_bonechild):
 	
 	# Cannot carry a dead animal
 	if ob_carry.get('life', 1) <= 0:
-		print "\tcant catch: cant carry dead"
+		print("\tcant catch: cant carry dead")
 		return False
 	
 	
@@ -99,13 +99,13 @@ def main(cont):
 	
 	ob_catch_bonechild = cont.sensors['carry_pos_linkonly'].owner	
 	if ob_catch_bonechild.children:
-		print '\tcarry warning, carrying was not set but had an object in hand! - should never happen, correcting'
+		print('\tcarry warning, carrying was not set but had an object in hand! - should never happen, correcting')
 		own['carrying'] = 1
 		return
 
 	# Do some sanity checks
 	if own['grounded'] == 0:
-		print '\tcant catch anything: we are not on the ground'
+		print('\tcant catch anything: we are not on the ground')
 		dontCatch(cont)
 		return
 	
@@ -120,7 +120,7 @@ def main(cont):
 		if own['action_name'] in ('', 'kick'):
 			pass
 		else:
-			print '\tcant catch anything: midst other action, not doing action', own['action_name'], own['action_name']
+			print('\tcant catch anything: midst other action, not doing action', own['action_name'], own['action_name'])
 			dontCatch(cont)
 			return
 	
@@ -131,7 +131,7 @@ def main(cont):
 	sens_collideCarry = cont.sensors['carry_collider']
 	
 	if not sens_collideCarry.positive:
-		print '\tcant catch anything: carry collider false'
+		print('\tcant catch anything: carry collider false')
 		dontCatch(cont)
 		return
 	

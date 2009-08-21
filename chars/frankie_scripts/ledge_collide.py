@@ -23,7 +23,7 @@ def main(cont):
 	if not sens_ledge.positive:
 		return
 	
-	# print "LEDGE TOUCHING", sens_ledge.positive
+	# print("LEDGE TOUCHING", sens_ledge.positive)
 	
 	if frankTestLedge(own, cont, sens_ledge.hitObject, False)[0] != None:
 		
@@ -39,5 +39,4 @@ def main(cont):
 		cont.activate('hang_state')
 		return
 	
-	#print "Missed"
-	print '\tledge_grab: could not grab ledge'
+	print('\tledge_grab: could not grab ledge')

@@ -24,4 +24,4 @@ def main(cont):
 	
 	own.setLinearVelocity((0.0, 0.0, 0.0), 1)
 	own.localPosition = (own['x_orig'], own['y_orig'], own['z_orig'])
-	# print "respawn"
+	# print("respawn")

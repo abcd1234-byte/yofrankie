@@ -14,11 +14,11 @@ def main(cont):
 		return
 	
 	if not ('hit' in predator_ob and predator_ob.has_key('life')):
-		print '\tattack: predator missing "hit" or "life" property'
+		print('\tattack: predator missing "hit" or "life" property')
 		return
 	
 	if predator_ob['life'] <= 0:
-		# print '\tattack: predator alredy dead'
+		# print('\tattack: predator alredy dead')
 		return
 	
 	# face the predator, this is always activated

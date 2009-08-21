@@ -8,8 +8,8 @@ import GameLogic
 ITEM_PREFIX = 'OBitem_'
 
 def main():
-	# print 'Setting scene properties from python configuration dictionary'
-	# print 'using dictionary - GameLogic.globalDict["CONFIG"]'
+	# print('Setting scene properties from python configuration dictionary')
+	# print('using dictionary - GameLogic.globalDict["CONFIG"]')
 	
 	conf = GameLogic.globalDict['CONFIG']
 	sce = GameLogic.getCurrentScene()
@@ -43,7 +43,7 @@ def main():
 		conf_key = ob['conf_key']
 		
 		if conf_key not in conf:
-			print '\tMenu error - item:', ob.name, 'uses conf_key:', conf_key, 'not found in GameLogic.globalDict["CONFIG"], ignoring'
+			print('\tMenu error - item:', ob.name, 'uses conf_key:', conf_key, 'not found in GameLogic.globalDict["CONFIG"], ignoring')
 			continue
 		
 		if 'radio' in ob:
@@ -51,7 +51,7 @@ def main():
 		elif 'toggle' in ob:
 			obs_toggle.append(ob)
 		else:
-			print '\tMenu error - item:', ob.name, 'uses conf_key:', conf_key, 'is not a toggle or a radio button, ignoring'
+			print('\tMenu error - item:', ob.name, 'uses conf_key:', conf_key, 'is not a toggle or a radio button, ignoring')
 			
 	
 	# ***************************
@@ -77,9 +77,9 @@ def main():
 		
 	# ***************************
 	# Toggle - for switches
-	## print '\tToggles'
+	## print('\tToggles')
 	for ob in obs_toggle:
-		## print '\tSetting toggle state for', ob.getName(), 'conf_key:', ob.conf_key, 'state:', conf[ob.conf_key]
+		## print('\tSetting toggle state for', ob.getName(), 'conf_key:', ob.conf_key, 'state:', conf[ob.conf_key])
 		ob['toggle'] = conf[ob['conf_key']]
 	
 	
@@ -91,7 +91,7 @@ def main():
 		try:	ob=	key_mapping[opt]
 		except: ob = None
 		if ob:		ob['Text'] = GameKeys.EventToString(conf[opt]).replace('ARROW', '').replace('KEY', '').lower()
-		else:		print 'no object found for', opt
+		else:		print('no object found for', opt)
 	
 	keys = [
 		'KEY_UP_P1',\

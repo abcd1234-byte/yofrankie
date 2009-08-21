@@ -35,7 +35,7 @@ def sideOfGameObject(own, own_pos, pt):
 
 
 def reset_target(own, cont, own_pos, predator_ob):
-	# print 'RESET TARGET...'
+	# print('RESET TARGET...')
 	TARGET_DIST_MIN = 2.0
 	TARGET_DIST_MAX = 8.0
 	
@@ -51,7 +51,7 @@ def reset_target(own, cont, own_pos, predator_ob):
 	
 	if predator_ob:
 		if own['revive_time'] < 4.0:
-			# print "recover, escape!"
+			# print("recover, escape!")
 			ATTACK = False
 		elif own['type'] == 'ram':
 			ATTACK = True
@@ -71,7 +71,7 @@ def reset_target(own, cont, own_pos, predator_ob):
 			else:
 				ATTACK = True
 			
-		# print 'ATTACK', ATTACK
+		# print('ATTACK', ATTACK)
 		# Attack done
 		
 		
@@ -81,7 +81,7 @@ def reset_target(own, cont, own_pos, predator_ob):
 		
 		if ATTACK:
 			# ATTACK!
-			### print 'ATTACK'
+			### print('ATTACK')
 			#own['target_x'] = pos[0]
 			#own['target_y'] = pos[1]
 			new_dir.z = 0
@@ -90,7 +90,7 @@ def reset_target(own, cont, own_pos, predator_ob):
 			own['target_x'] = pos[0] - new_dir.x
 			own['target_y'] = pos[1] - new_dir.y
 		else:
-			### print 'FLEE'
+			### print('FLEE')
 			new_dir.z = 0.0
 			new_dir.length = L
 			
@@ -102,7 +102,7 @@ def reset_target(own, cont, own_pos, predator_ob):
 			own['target_y'] = new_dir.y + own_pos[1]
 		
 	else:
-		### print 'RANDOM'
+		### print('RANDOM')
 		# Random target
 		ang = 90 + (Rand()*180)
 		new_dir = Vector(own_front) * RotationMatrix(ang, 3, 'z')
@@ -146,17 +146,17 @@ def go_target(own, cont, own_pos, predator_ob, TARGET_TIME_LIMIT):
 		(own['target_time'] > TARGET_TIME_LIMIT) or \
 		(predator_ob and own['type'] in ('ram', 'rat') and own['target_time'] > 0.15):
 		
-		# print "Over time limit", (direction.length < 1.2), (own['target_time'] > TARGET_TIME_LIMIT), (predator_ob and own['type']=='ram' and own['target_time'] > 0.15)
+		# print("Over time limit", (direction.length < 1.2), (own['target_time'] > TARGET_TIME_LIMIT), (predator_ob and own['type']=='ram' and own['target_time'] > 0.15))
 		reset_target(own, cont, own_pos, predator_ob)
 	
 	'''
 	side = sideOfGameObject(own, own_pos, [target_x, target_y])
 	if side > 0:
 		DIRECTION[0] = 2
-		#print "LEFT"
+		#print("LEFT")
 	else:
 		DIRECTION[0] = 1
-		#print "RIGHT"
+		#print("RIGHT")
 	'''
 	
 	# Angle test means we can check for a low angle
@@ -165,10 +165,10 @@ def go_target(own, cont, own_pos, predator_ob, TARGET_TIME_LIMIT):
 		DIRECTION[0] = 0
 	elif angle < 0:
 		DIRECTION[0] = 2
-		#print "LEFT"
+		#print("LEFT")
 	else:
 		DIRECTION[0] = 1
-		#print "RIGHT"
+		#print("RIGHT")
 
 def main(cont):
 	
@@ -180,16 +180,16 @@ def main(cont):
 	DIRECTION[0] = 0 # just incase, multiple animals will use this module so must initialize
 	
 	own = cont.owner
-	# print own['type']
+	# print(own['type'])
 	actu_motion = cont.actuators['motion_py']
 	
-	# print own['target_time']
+	# print(own['target_time'])
 	
 	### setpos([own['target_x'], own['target_y'], 0.0])
 	
 	cont_name = cont.name
 	
-	#print cont_name, 'cont_name'
+	#print(cont_name, 'cont_name')
 	if cont_name.startswith('walk_normal'):
 		ROTATE_SPEED = 0.02
 		RUN_SPEED = 0.02
@@ -254,11 +254,11 @@ def main(cont):
 	
 	
 	#if sens_l_hitob:
-	#	print str(sens_l_hitob.name), 'hitob'
+	#	print(str(sens_l_hitob.name), 'hitob')
 	
 	
 	
-	# print 'TETS', type(sens_l_hitob), type(sens_r_hitob)
+	# print('TETS', type(sens_l_hitob), type(sens_r_hitob))
 	
 	
 	# Check if we are running into frankie while he is reviving, if so turn away.
@@ -279,11 +279,11 @@ def main(cont):
 	if own['target_time'] < 0.0:
 		# Should this be a state rather then abusing a timer?
 		# This is a bit of a hack. oh well :/
-		# print 'ROTATING!', own['target_time']
+		# print('ROTATING!', own['target_time'])
 		DIRECTION[0] = 1
 		RUN_SPEED = 0.0
 	elif sens_l_hitob and sens_r_hitob:
-		# print "BOTH OK"
+		# print("BOTH OK")
 		# Both collide, so do somtething
 		####lpos =  sens_l.hitPosition
 		ldist = own.getDistanceTo(lpos)
@@ -293,7 +293,7 @@ def main(cont):
 		rdist = own.getDistanceTo(rpos)
 		####rnor = sens_r.hitNormal
 		
-		# print ldist, rdist, 'DIST'
+		# print(ldist, rdist, 'DIST')
 		
 		# Not really an angle, but we can treat it a bit like one
 		ang = ldist-rdist
@@ -321,7 +321,7 @@ def main(cont):
 		# in this case just turn 1 way
 		
 		if ldist<TOO_CLOSE and rdist<TOO_CLOSE:
-			# print "\tchar navigation: ray casts both too close", ldist, rdist
+			# print("\tchar navigation: ray casts both too close", ldist, rdist)
 			# would be nice to alternate but no big deal
 			DIRECTION[0] = 1
 			RUN_SPEED = 0.0
@@ -331,13 +331,13 @@ def main(cont):
 			own['target_time'] = -TURN_TIME
 			
 		elif abs(ang) > WALL_LIMIT:
-			#print "GO WALL"
+			#print("GO WALL")
 			if ang < 0 or (ldist<TOO_CLOSE and rdist<TOO_CLOSE):
 				DIRECTION[0] = 1
 			else:
 				DIRECTION[0] = 2
 		else:
-			# print "GO TARGET"
+			# print("GO TARGET")
 			go_target(own, cont, own_pos, predator_ob, TIME_LIMIT)
 		
 		if not (sens_l_hitob and sens_r_hitob):
@@ -345,7 +345,7 @@ def main(cont):
 
 	elif (not sens_l_hitob) and (not sens_r_hitob):
 		# We are on a ledge
-		# print "EMPTY CLOSE" #, ldist, rdist
+		# print("EMPTY CLOSE" #, ldist, rdist)
 		# would be nice to alternate but no big deal
 		DIRECTION[0] = 1
 		RUN_SPEED = 0.0
@@ -365,18 +365,18 @@ def main(cont):
 	
 	
 	# Apply direction
-	# print 'DIRECTION', DIRECTION, ldist, rdist
+	# print('DIRECTION', DIRECTION, ldist, rdist)
 	if DIRECTION[0] == 0:
-		# print 'NotTurning'
+		# print('NotTurning')
 		actu_motion.dRot = (0.0, 0.0, 0.0)
 		
 		# cont.deactivate(actu_turn)
 	else:
 		if DIRECTION[0] == 1:
-			# print 'Turning Left'
+			# print('Turning Left')
 			rot = -ROTATE_SPEED
 		elif DIRECTION[0] == 2:
-			# print 'Turning Right'
+			# print('Turning Right')
 			rot = ROTATE_SPEED	
 		actu_motion.dRot = (0.0, 0.0, rot)
 	

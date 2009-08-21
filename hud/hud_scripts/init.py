@@ -10,7 +10,7 @@ def main(cont):
 	try:
 		PLAYER_COUNT = GameLogic.globalDict['CONFIG']['PLAYER_COUNT']
 	except:
-		print "\twarning hud: this should be run as an overlay to frankie\n\tkeep going for testing purposes"
+		print("\twarning hud: this should be run as an overlay to frankie\n\tkeep going for testing purposes")
 		PLAYER_COUNT = 2
 	
 	# Dont show the p2 hud if we are playing single player
@@ -24,7 +24,7 @@ def main(cont):
 			actu_own.setVisible(False, True) # recursive, sets text invisible also
 	
 	'''
-	print dir(own)
+	print(dir(own))
 	# set crap in a 
 	point_p1 = [0.0,0.0,0.0]
 	

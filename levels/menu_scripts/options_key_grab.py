@@ -14,7 +14,7 @@ def main(cont):
 	
 	own = cont.owner
 	
-	# print "Grabbing Key", own.getName()
+	# print("Grabbing Key", own.getName())
 	
 	# We only have 1 key sensor
 	# its name is used to reference the python setting
@@ -25,13 +25,13 @@ def main(cont):
 	key_id = None
 	
 	for k_id, press_stat in sensor.events:
-		# print 'key id', k_id, press_stat
+		# print('key id', k_id, press_stat)
 		if not press_stat == 3: #1 is down 3, is for key up... ok???
 			key_id = k_id
 			break
 		
 	if key_id == None:
-		print 'NoKey Presed'
+		print('NoKey Presed')
 		return
 	
 	

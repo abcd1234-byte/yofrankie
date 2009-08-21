@@ -17,7 +17,7 @@ def main(cont):
 	
 	
 	# In this case we just want to update the lists
-	## print '\thud: messages for predator ids are:', messages_player_ids
+	## print('\thud: messages for predator ids are:', messages_player_ids)
 	
 	if messages_player_ids == None or '-1' in messages_player_ids or len(messages_player_ids) == 0:
 		if GameLogic.globalDict['CONFIG']['PLAYER_COUNT'] == 1:
@@ -48,7 +48,7 @@ def main(cont):
 			cont.actuators['set_bonecount_p' + player_num].owner['Text'] = '%.4d' % bonecount 
 			# Done with bonetext
 	
-		## print '\thud: hitlist - ', hitlist
+		## print('\thud: hitlist - ', hitlist)
 		
 		
 		prefix = 'replace_hitlist_p' + player_num
@@ -56,7 +56,7 @@ def main(cont):
 		# 5 replace mesh actuators in order.
 		actus_icons = [s[1] for s in actus if s[0].startswith(prefix)]
 		
-		# print 'actu_icons', actus_icons, prefix, actus
+		# print('actu_icons', actus_icons, prefix, actus)
 		
 		
 		# remove all hitlist items that are invisible now
@@ -107,16 +107,16 @@ def main(cont):
 			actu_own = actu.owner
 			actu_text = actu_own.children[0]
 			
-			## print '\thud: setting icon!', i, id, icon_mesh_name, life, lifemax
+			## print('\thud: setting icon!', i, id, icon_mesh_name, life, lifemax)
 			
 			current_mesh = actu.mesh
 			if current_mesh: current_mesh = current_mesh.name[2:]
 			
-			# print "\thud debug", icon_mesh_name, current_mesh, icon_text, actu_text.Text, UPDATE_FULL
+			# print("\thud debug", icon_mesh_name, current_mesh, icon_text, actu_text.Text, UPDATE_FULL)
 			
 			
 			if UPDATE_FULL == False and icon_mesh_name == current_mesh and icon_text == actu_text['Text']:
-				# print "NOTHING TO DO"
+				# print("NOTHING TO DO")
 				pass
 			else:
 				if icon_text != actu_text['Text']:
@@ -140,7 +140,7 @@ def main(cont):
 			i+=1
 		
 		# Clear any remaining
-		## print 'actus_icons', len(actus_icons), actus_icons
+		## print('actus_icons', len(actus_icons), actus_icons)
 		for i in xrange(i, 6):
 			
 			actu = actus_icons[i]
@@ -152,4 +152,4 @@ def main(cont):
 			actu_own.setVisible(False, True) # recursive, also sets text invisible
 			cont.activate('inactive_state_p%s_%d' % (player_num, i))
 		
-## print "\n\nUPDATING HUD"
+## print("\n\nUPDATING HUD")

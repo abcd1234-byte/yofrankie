@@ -30,7 +30,7 @@ def update_hud(cont, own):
 def main(cont):
 	own = cont.owner
 	
-	# print own.hit, 'own.hit'
+	# print(own.hit, 'own.hit')
 	
 	if own['hit']==0 or own['revive_time'] < 1.0:
 		own['hit'] = 0
@@ -40,7 +40,7 @@ def main(cont):
 	'''
 	if own['grounded'] == 0:
 		# trigger so will re-run
-		print '\tchar: not on ground, not reacting to hit yet'
+		print('\tchar: not on ground, not reacting to hit yet')
 		return
 	'''
 	
@@ -80,8 +80,8 @@ def main(cont):
 			break
 	
 	# Play Hit Anim
-	print '\nSHEEP WAS HIT!!!!!\n'
-	print 'own["attack_type"]', own['attack_type']
+	print('\nSHEEP WAS HIT!!!!!\n')
+	print('own["attack_type"]', own['attack_type'])
 	if own['attack_type']=='kick':
 		own['attack_type'] = ''
 		if actu_kicked:

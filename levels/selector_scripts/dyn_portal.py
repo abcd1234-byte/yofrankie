@@ -12,7 +12,7 @@ def main(cont):
 	
 	sce = GameLogic.getCurrentScene()
 	#for ob in sce.objects:
-	#	print ob.name
+	#	print(ob.name)
 	
 	actu_add_object = cont.actuators['add_dyn_portal']
 	
@@ -46,12 +46,12 @@ def main(cont):
 				
 				blendFiles.remove(b)
 
-	print blendFiles
+	print(blendFiles)
 	
 	totFiles = len(blendFiles)
 	
 	if not totFiles:
-		print "No Levels Found!"
+		print("No Levels Found!")
 		return
 	
 	# Some vars for positioning the portals
@@ -59,17 +59,17 @@ def main(cont):
 	
 	
 	totFiles = float(totFiles)
-	# print 'PLACING'
+	# print('PLACING')
 	for i,f in enumerate(blendFiles):
 		ang = 360 * (i/totFiles)
-		# print i,f,ang
+		# print(i,f,ang)
 		mat = RotationMatrix(ang, 3, 'z')
 		pos_xy = list((start * mat) + own_pos)  # rotate and center around the gamelogic object
 		
 		ray_down = pos_xy[:]
 		ray_down[2] -= 1.0
 		
-		print pos_xy
+		print(pos_xy)
 		pos_xy[2] = 500 # cast down from on high
 		#pos_xy[2] = 16 # cast down from on high
 		ob_hit, hit_first, nor_first = own.rayCast(ray_down, pos_xy, 1000) # 'ground')

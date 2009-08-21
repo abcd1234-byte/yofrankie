@@ -7,9 +7,9 @@ def main(cont):
 	own = cont.owner
 
 	# Cant pickup when hurt
-	# print own.hit, own.revive_time
+	# print(own.hit, own.revive_time)
 	if own['hit'] or own['revive_time'] < 1.0 or own['carrying'] or own['carried']:
-		print "Cant collect items when hit, reviving, carrying or carried"
+		print("Cant collect items when hit, reviving, carrying or carried")
 		return 
 	
 	sens_pickup = cont.sensors['pickup_touch']
@@ -52,7 +52,7 @@ def main(cont):
 			item_attr = pickup['pickup']
 			
 			if not item_attr.startswith('item_'):
-				print 'Incorrect name', own, item_attr
+				print('Incorrect name', own, item_attr)
 			else:
 				own[item_attr] = own.get(item_attr, 0) + 1
 				

@@ -59,7 +59,7 @@ def do_double_jump(own, cont, dropping_dir, actu_dbl_jump_anim, actu_dbl_jump_fo
 			own['double_jump'] = DBL_JUMP_DELAY
 		else:
 			# Do the double jump
-			# print "Reset Actuator 2", actu_dbl_jump_anim.getStart()
+			# print("Reset Actuator 2", actu_dbl_jump_anim.getStart())
 			# actu_dbl_jump_anim.setFrame( actu_dbl_jump_anim.getStart() )
 			
 			cont.activate(actu_dbl_jump_anim)
@@ -81,8 +81,8 @@ def do_double_jump(own, cont, dropping_dir, actu_dbl_jump_anim, actu_dbl_jump_fo
 
 def do_glide_state(own, cont, velocity):
 	# We know this cant be done before double jumping or missing a double jump
-	# print cont.sensors['any_collide'].positive, cont.sensors['any_collide'].hitObjectList,
-	###print [o.name for o in cont.sensors['any_collide'].hitObjectList]
+	# print(cont.sensors['any_collide'].positive, cont.sensors['any_collide'].hitObjectList,)
+	###print([o.name for o in cont.sensors['any_collide'].hitObjectList])
 	
 	if velocity[2] > 0.0: # we must be falling
 		return
@@ -90,7 +90,7 @@ def do_glide_state(own, cont, velocity):
 	if cont.sensors['collide_any'].positive:
 		return
 	
-	# print dir(cont.sensors['any_collide'])
+	# print(dir(cont.sensors['any_collide']))
 	if	own['double_jump'] == DBL_JUMP_MISSED  or  \
 		(own['double_jump'] == DBL_JUMP_DONE  and  own['jump_time'] > 100.3): # and \
 		# Note, own['jump_time'] over 100.0 will give a limit so you cant double jump right away
@@ -109,7 +109,7 @@ def main(cont):
 	# own.restoreDynamics() # WE SHOULDNT HAVE TO CALL THIS HERE
 	
 	
-	# print [o.name for o in cont.sensors['any_collide'].hitObjectList]
+	# print([o.name for o in cont.sensors['any_collide'].hitObjectList])
 	
 	velocity = own.getLinearVelocity()
 	
@@ -157,7 +157,7 @@ def main(cont):
 		cont.deactivate(actu_dbl_jump_force)
 	
 	# Add falling animations
-	# print '%.4f' % velocity[2]
+	# print('%.4f' % velocity[2])
 	# Use the right falling animation, falling up or down?
 	if velocity[2] > 0.0:
 		cont.deactivate('fall_down')

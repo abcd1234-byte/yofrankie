@@ -47,7 +47,7 @@ def main(cont):
 				if ob_add:
 					sce.addObject(ob_add, ob, 300)
 				else:
-					print "splash add error, object is not available in this level"
+					print("splash add error, object is not available in this level")
 				
 
 # Initialize for the first time

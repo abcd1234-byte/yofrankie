@@ -22,7 +22,7 @@ def main(cont):
 	hit_z = hit_ob.worldPosition[2]
 	
 	if own_z - hit_z < BOUNCE_Z_DIST:
-		print '\tbounce: must be above object to bounce on it'
+		print('\tbounce: must be above object to bounce on it')
 		return
 	
 	# Tell the object it has been bounced on!
@@ -44,4 +44,4 @@ def main(cont):
 	cont.activate('jumping')
 	cont.activate('sfx_bounce')
 	
-	# print '\tFrankBouncing!'	
+	# print('\tFrankBouncing!')

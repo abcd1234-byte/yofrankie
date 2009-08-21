@@ -21,10 +21,10 @@ def main(cont):
 	
 	if own['boosted'] < 0.0:
 		speed = BASE_SPEED*2
-		#print "The Power is ON!"
+		#print("The Power is ON!")
 	else:
 		speed = BASE_SPEED
-		#print "The Power is OFF!"
+		#print("The Power is OFF!")
 	
 	speed += (BASE_SPEED*Z*ANGLE_SPEED)	
 	

@@ -69,9 +69,9 @@ def main(cont):
 	try:	conf = GameLogic.globalDict['CONFIG']
 	except:	conf = None
 
-	print '\n\nCONF!!!'
+	print('\n\nCONF!!!')
 	for item in conf.items():
-		print item
+		print(item)
 
 	try:	ID = globalDict['PLAYER_ID'] = globalDict['PLAYER_ID'] + 1
 	except:	ID = globalDict['PLAYER_ID'] = 0
@@ -91,7 +91,7 @@ def main(cont):
 
 	own_player['id'] = ID
 
-	print 'frank_init: ID:', ID
+	print('frank_init: ID:', ID)
 
 	def setPlayers():
 		import Rasterizer
@@ -105,7 +105,7 @@ def main(cont):
 			cont.activate('set_camera')
 			return True
 		if ID != 0 and ID != 1:
-			print "Unsupported number of players, running anyway"
+			print("Unsupported number of players, running anyway")
 			cont.activate('set_camera')
 			return True
 		
@@ -127,12 +127,12 @@ def main(cont):
 				# Vert
 				#own_camera.setViewport(0, h/2, w, h) 
 				# Hoz
-				own_camera.setViewport(0, 0, w/2, h)
+				own_camera.setViewport(0, 0, int(w/2), h)
 			if ID == 1:
 				# Vert
 				#own_camera.setViewport(0, 0, w, h/2) 
 				# Hoz
-				own_camera.setViewport(w/2, 0, w, h) 
+				own_camera.setViewport(int(w/2), 0, w, h) 
 		
 		if not WITHOUT_CAMERA:
 			cont.activate('set_camera')
@@ -163,7 +163,7 @@ def main(cont):
 		
 		# First see if we have a valid joystick
 		sensors = cont.sensors
-		# print len(sensors), 'sensors'
+		# print(len(sensors), 'sensors')
 		joySensors = [s for s in sensors if type(s) == GameTypes.SCA_JoystickSensor]
 		keySensors = [s for s in sensors if type(s) == GameTypes.SCA_KeyboardSensor]
 		
@@ -177,12 +177,12 @@ def main(cont):
 		# Use the last joystick sensor
 		if sens.connected:
 			# remove the keyboard object and dont bother setting up keyconfig
-			print 'Player', ID, 'using joystick'
+			print('Player', ID, 'using joystick')
 			own_kb.endObject()
 			return
 		else:
 			# No joystick connected at ID, setup keys
-			print 'Player', ID, 'using keyboard'
+			print('Player', ID, 'using keyboard')
 			own_joy.endObject()
 		
 		
@@ -190,7 +190,7 @@ def main(cont):
 		# Done With joystick, Fallback to keys!
 		
 		if not conf:
-			print "config not loaded"
+			print("config not loaded")
 			return
 		
 		# First player, leave keys as is
@@ -226,7 +226,7 @@ def main(cont):
 				if type(sens) == GameTypes.SCA_KeyboardSensor:
 					sens.key = KEY_MAPPING[sens.key]
 		else:
-			print 'Cannot map keys for player ID', ID
+			print('Cannot map keys for player ID', ID)
 				
 	def backupPosition():
 		# For respawning. run BEFORE backupProps
@@ -265,7 +265,7 @@ def main(cont):
 		try:
 			target_ob = sce.objects[target_name] # alredy has 'OB' prefix
 		except:
-			print 'Oops: portal switch error,', target_name, 'object is not in the scene'
+			print('Oops: portal switch error,', target_name, 'object is not in the scene')
 			return
 		
 		pos = target_ob.worldPosition
@@ -298,7 +298,7 @@ def main(cont):
 		conf = GameLogic.globalDict['CONFIG']
 		
 		if conf['GRAPHICS_DETAIL'] == 0:
-			print "\tconfig: setting deytail low"
+			print("\tconfig: setting deytail low")
 			Rasterizer.setGLSLMaterialSetting("lights", 1)
 			Rasterizer.setGLSLMaterialSetting("shaders", 0)
 			Rasterizer.setGLSLMaterialSetting("shadows", 0)
@@ -306,7 +306,7 @@ def main(cont):
 			Rasterizer.setGLSLMaterialSetting("nodes", 0)
 			Rasterizer.setGLSLMaterialSetting("extra_textures", 1)
 		elif conf['GRAPHICS_DETAIL'] == 1:
-			print "\tconfig: setting deytail med"
+			print("\tconfig: setting deytail med")
 			Rasterizer.setGLSLMaterialSetting("lights", 1)
 			Rasterizer.setGLSLMaterialSetting("shaders", 0)
 			Rasterizer.setGLSLMaterialSetting("shadows", 0)
@@ -314,7 +314,7 @@ def main(cont):
 			Rasterizer.setGLSLMaterialSetting("nodes", 0)
 			Rasterizer.setGLSLMaterialSetting("extra_textures", 1)
 		else: # high quality
-			print "\tconfig: setting deytail high"
+			print("\tconfig: setting deytail high")
 			Rasterizer.setGLSLMaterialSetting("lights", 1)
 			Rasterizer.setGLSLMaterialSetting("shaders", 1)
 			Rasterizer.setGLSLMaterialSetting("shadows", 1)
@@ -329,10 +329,10 @@ def main(cont):
 		
 		if not setPlayers():
 			own_player.endObject()		
-			print "REMOVING PLAYER", ID		
+			print("REMOVING PLAYER", ID)
 			return
 		else:
-			print "ADDING PLAYER", ID
+			print("ADDING PLAYER", ID)
 		
 		setHUD()
 		if PROPS != {}:

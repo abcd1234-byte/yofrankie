@@ -28,7 +28,7 @@ def frankTestLedge(own, cont, hit_object, CORRECTION_RAY):
 	'''
 
 	if own['carrying'] or own['carried']:
-		print "cant grab - carry!"
+		print("cant grab - carry!")
 		return None, None, None
 
 	own_pos = own.worldPosition
@@ -47,18 +47,18 @@ def frankTestLedge(own, cont, hit_object, CORRECTION_RAY):
 	ray_dir[1] += y_axis[1]
 	
 	if hit_object:
-		# print "HITUP!!!"
+		# print("HITUP!!!")
 		#ob_ledge, hit_first, nor_first = own.rayCast(ray_dir, hit_object, RAY_LENGTH)
 		ob_ledge, hit_first, nor_first = own.rayCast(ray_dir, own_pos, RAY_LENGTH)
 		if ob_ledge and ob_ledge != hit_object:
-			print  "Hit Wrong Object, was %s should be %s" % (ob_ledge.name, hit_object.name) # should never happen
+			print("Hit Wrong Object, was %s should be %s" % (ob_ledge.name, hit_object.name)) # should never happen
 			return None, None, None			
 	else:
-		# print "NO HITOB!!!"
+		# print("NO HITOB!!!")
 		ob_ledge, hit_first, nor_first = own.rayCast(ray_dir, own_pos, RAY_LENGTH, 'ledge')
 	
 	if not hit_first:
-		print "FirstLedgeRay Missed!", ray_dir, y_axis
+		print("FirstLedgeRay Missed!", ray_dir, y_axis)
 		return None, None, None
 	
 	# debug.setpos( hit_first )
@@ -82,10 +82,10 @@ def frankTestLedge(own, cont, hit_object, CORRECTION_RAY):
 			ob_closer, hit_closer, nor_closer = own.rayCast(ray_dir_closer, None, RAY_LENGTH, 'ledge')
 		
 		if ob_closer:
-			### print  "CAST !!!!!!!!2nd ray"
+			### print("CAST !!!!!!!!2nd ray")
 			AXIS = ((hit_closer, y_axis_corrected, nor_closer), (hit_first, y_axis, nor_first))
 		else:
-			### print "Can only castr 1 ray"
+			### print("Can only castr 1 ray")
 			AXIS = ((hit_first, y_axis, nor_first),)
 	else:
 		# Simple, dont pradict best second ray
@@ -116,22 +116,22 @@ def frankTestLedge(own, cont, hit_object, CORRECTION_RAY):
 		
 		if ob_ledge:
 			own['can_climb'] = 1
-			### print "Round nice RAY at pt", hit_down[2]
+			###print("Round nice RAY at pt", hit_down[2])
 			# debug.setpos( hit_down )
 			return hit_new, nor_new, hit_down[2]
 
 	# Could not hit it vertically...
 	# Ok we will try to find the bugger!
 	# Cast multiple rays, this is not pretty
-	### print "BUGGER, cant climb", ob_closer
+	### print("BUGGER, cant climb", ob_closer)
 	own['can_climb'] = 0
 	
 	new_ray_pos = own_pos[:] # we only need to adjust its z value
 	if ob_closer:
-		# print "Closer"
+		# print("Closer")
 		new_ray_pos_target = ray_dir_closer[:]
 	else:
-		# print "NotCloser"
+		# print("NotCloser")
 		new_ray_pos_target = ray_dir_first[:]
 
 	target_z = own_pos[2]-CLIMB_HANG_Z_OFFSET
@@ -148,7 +148,7 @@ def frankTestLedge(own, cont, hit_object, CORRECTION_RAY):
 	# Ray cast with an increasingly higher Z origin to find the top of the ledge
 	while z_ray_search_origin < z_ray_search_limit:
 		i+=1
-		# print i, z_ray_search_origin, (own_pos[2]-(CLIMB_HANG_Z_OFFSET*1.8))-z_ray_search_origin
+		# print(i, z_ray_search_origin, (own_pos[2]-(CLIMB_HANG_Z_OFFSET*1.8))-z_ray_search_origin)
 		z_ray_search_origin += inc
 		new_ray_pos[2] = new_ray_pos_target[2] = z_ray_search_origin
 		
@@ -158,7 +158,7 @@ def frankTestLedge(own, cont, hit_object, CORRECTION_RAY):
 			test_ok = test
 		elif test[0]==None and test_ok: # If we have hit 
 			# no hit, return the last hit
-			# print "Found", i
+			# print("Found", i)
 			'''
 			crap = test_ok[1][:]
 			crap[2] = z_ray_search_limit
@@ -167,7 +167,7 @@ def frankTestLedge(own, cont, hit_object, CORRECTION_RAY):
 			
 			return test_ok[1], test_ok[2], z_ray_search_origin
 	
-	print "Missed VRAY"
+	print("Missed VRAY")
 	# crap = hit_first[:]
 	# crap[2] = own_pos[2]-CLIMB_HANG_Z_OFFSET
 	# debug.setpos( crap )
