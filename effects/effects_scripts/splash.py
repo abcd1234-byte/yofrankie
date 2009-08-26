@@ -35,7 +35,6 @@ def main(cont):
 	for sens in cont.sensors: # one or more water surface meshes	
 		if sens.positive:
 			for ob in sens.hitObjectList:
-				pos = ob.worldPosition
 				
 				if is_lava:
 					ob_add = SPLASH_LS[3]

@@ -141,7 +141,7 @@ def main(cont):
 		
 		# Clear any remaining
 		## print('actus_icons', len(actus_icons), actus_icons)
-		for i in xrange(i, 6):
+		for i in range(i, 6):
 			
 			actu = actus_icons[i]
 				
