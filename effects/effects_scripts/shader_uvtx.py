@@ -52,7 +52,7 @@ def main(cont):
 
 			# find an index				
 			found = 0
-			for i in xrange(len(MaterialIndexList)):
+			for i in range(len(MaterialIndexList)):
 				if mat_index == MaterialIndexList[i]:
 					found=1
 					break

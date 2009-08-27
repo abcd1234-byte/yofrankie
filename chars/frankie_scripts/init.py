@@ -238,7 +238,7 @@ def main(cont):
 			PROPS[propName] = own_player[propName]
 
 	def restoreProps():
-		for prop, value in PROPS.iteritems():
+		for prop, value in PROPS.items():
 			own_player[prop] = value
 
 	def setPortal():

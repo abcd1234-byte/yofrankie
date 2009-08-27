@@ -28,5 +28,9 @@ def main(cont):
 	
 	speed += (BASE_SPEED*Z*ANGLE_SPEED)	
 	
-	run_actu.linV = (0.0, speed, 0.0) # local linv
+	import Mathutils
+	run_actu.linV = Mathutils.Vector(0.0, 4.0, 0.0) # local linv
+	
+	print(run_actu.linV)
+	
 

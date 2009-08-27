@@ -33,14 +33,14 @@ def main(cont):
 	
 	
 	if not joy_p1:
-		for item in conf.iteritems():
+		for item in conf.items():
 			if item[0].startswith('KEY_') and item[0].endswith('_P1'):
 				keys_p1.append( item )
 	
 		keys_p1.sort()
 		
 	if not joy_p2:
-		for item in conf.iteritems():
+		for item in conf.items():
 			if item[0].startswith('KEY_') and item[0].endswith('_P2'):
 				keys_p2.append( item )
 			

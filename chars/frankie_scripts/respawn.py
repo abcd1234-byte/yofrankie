@@ -25,7 +25,7 @@ def main(cont):
 	props = GameLogic.globalDict['PROP_BACKUP'][own['id']]
 	
 	# We backed these up, see frank_init
-	for prop, value in props.iteritems():
+	for prop, value in props.items():
 		own[prop] = value
 	
 	# Update the HUD
