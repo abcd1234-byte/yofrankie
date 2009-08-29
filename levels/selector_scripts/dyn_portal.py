@@ -25,6 +25,7 @@ def main(cont):
 	# Remove doubles
 	# blendFiles	= list(set(blendFiles)) # breaks py2.3
 	blendFiles = dict([(b, None) for b in blendFiles]).keys()
+	blendFiles = list(blendFiles) # py3 has its own dict_keys type
 	
 	blendFiles.sort()
 	

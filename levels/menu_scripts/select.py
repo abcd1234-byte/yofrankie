@@ -15,7 +15,7 @@ def menu_items(sce):
 	Return all names starting with item_ - in a sorted list
 	'''
 	ls = [ob for ob in sce.objects if ob.name.startswith(ITEM_PREFIX)]
-	ls.sort(lambda a,b: cmp(a.name, b.name))
+	ls.sort(key=lambda a: a.name)
 	return ls
 
 def menu_mouse_item_index(cont, own, items):
