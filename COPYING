@@ -9,9 +9,7 @@ The attribution is:
 YoFrankie! (c) 2008, Blender Foundation, www.blender.org
 If in doubt, please visit www.creativecommons.org for help.
 Excluded from the Creative Commons license is:
-- the corporate/product logos on the website (including Blender logo,
-Creative Commons logo) and associated trademarks
-- Source code (python scripts) which are licenced under the GPLv2
+- Source code (python scripts) which are licenced under the GPLv2 or greater.
 
 --------------------- Example Usage -------------------
 You can use textures and .blend files (or models, rigs, etc) 
@@ -30,7 +28,7 @@ Contact email for further information: foundation (at) blender.org
 --------------------- Media ---------------------------
 All Media is licenced Creative Commons Attribution 3.0
  see: http://creativecommons.org/licenses/by/3.0/
- Media is defined as any image (*.png, *.tga, *.xcf)
+ Media is defined as any image (*.png, *.tga, *.jpeg, *.jpg, *.xcf, *.svg)
  any 3D scene (*.blend) and any sound (*.wav)
 
  Note that whilst being binary, *.blend files are not binary blobs
@@ -39,6 +37,8 @@ All Media is licenced Creative Commons Attribution 3.0
 
 --------------------- Source Code ---------------------
 Licensed under the GPL unless expressly stated otherwise.
+This includes all python scripts (*.py) and dist/yofrankie-bge,
+ dist/yofrankie-bge.desktop
 
                     GNU GENERAL PUBLIC LICENSE
                        Version 2, June 1991
