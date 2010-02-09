@@ -28,7 +28,7 @@ Contact email for further information: foundation (at) blender.org
 --------------------- Media ---------------------------
 All Media is licenced Creative Commons Attribution 3.0
  see: http://creativecommons.org/licenses/by/3.0/
- Media is defined as any image (*.png, *.tga, *.jpeg, *.jpg, *.xcf, *.svg)
+ Media is defined as any graphics files (*.png, *.tga, *.jpeg, *.jpg, *.xcf, *.svg, *.ttf)
  any 3D scene (*.blend) and any sound (*.wav)
 
  Note that whilst being binary, *.blend files are not binary blobs
