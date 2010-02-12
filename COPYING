@@ -1,6 +1,7 @@
-The media files in YoFrankie are licensed under the Creative CommonsAttribution 3.0 License. 
+The media files in YoFrankie are licensed under the Creative Commons
+Attribution 3.0 License.
 To view a copy of this license see the file "CC3.0",
-visit http://creativecommons.org/licenses/by/3.0/ 
+visit http://creativecommons.org/licenses/by/3.0/
 or send a letter to
  Creative Commons, 543 Howard Street,
  5th Floor, San Francisco, California, 94105, USA.
@@ -28,8 +29,8 @@ Contact email for further information: foundation (at) blender.org
 --------------------- Media ---------------------------
 All Media is licenced Creative Commons Attribution 3.0
  see: http://creativecommons.org/licenses/by/3.0/
- Media is defined as any graphics files (*.png, *.tga, *.jpeg, *.jpg, *.xcf, *.svg, *.ttf)
- any 3D scene (*.blend) and any sound (*.wav)
+ Media is defined as any graphics files (*.png, *.tga, *.jpeg, *.jpg, *.xcf,
+ *.svg, *.ttf) any 3D scene (*.blend) and any sound (*.wav)
 
  Note that whilst being binary, *.blend files are not binary blobs
  and contain no architecture dependent machine code.
