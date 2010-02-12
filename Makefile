@@ -16,10 +16,35 @@
 #
 # ##### END GPL LICENSE BLOCK #####
 
+NAME = yofrankie
+VERSION = 1.1b
+
 BLENDER = blender
 PYTHON = python
 SVN = svn
 PACKAGE_DIR = ./package
+
+dist_dirs = \
+	audio \
+	chars \
+	dist \
+	effects \
+	franci_test \
+	hud \
+	levels \
+	menus \
+	props \
+	textures \
+	$(NULL)
+
+dist_files = \
+	CC-BY3.0 \
+	COPYING \
+	GPL-2 \
+	Makefile \
+	README.TXT \
+	yo_frankie_stub.blend \
+	$(NULL)
 
 all:
 	# Copy files into a package dir
@@ -32,13 +57,25 @@ all:
 	fi
 	# end shell command
 	
-	
 	# Convert images, correct blendfile paths
 	# TODO - this is broken with 2.48a, because blend files saved have no G.curscreen
 	$(PYTHON) dist/imagefile_compress.py $(BLENDER) $(PACKAGE_DIR)
 	
 	# Compress all blendfiles
 	$(PYTHON) dist/blendfile_gzip.py $(PACKAGE_DIR)
-	
-	
-	
+
+gz:
+	tar -c --exclude-vcs --transform="s@^@$(NAME)-$(VERSION)/@" $(dist_dirs) $(dist_files) | gzip -cn9 > $(NAME)-$(VERSION).tar.gz
+
+bzip2:
+	tar -c --exclude-vcs --transform="s@^@$(NAME)-$(VERSION)/@" $(dist_dirs) $(dist_files) | bzip2 -cz9 > $(NAME)-$(VERSION).tar.bz2
+
+lzma:
+	tar -c --exclude-vcs --transform="s@^@$(NAME)-$(VERSION)/@" $(dist_dirs) $(dist_files) | lzma -cz9 > $(NAME)-$(VERSION).tar.lzma
+
+xz:
+	tar -c --exclude-vcs --transform="s@^@$(NAME)-$(VERSION)/@" $(dist_dirs) $(dist_files) | xz -cz9 > $(NAME)-$(VERSION).tar.xz
+
+dist: bzip2
+
+.PHONY: all dist gz bzip2 lzma xz
